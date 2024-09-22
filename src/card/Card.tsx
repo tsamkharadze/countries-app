@@ -1,4 +1,4 @@
-import "./card.css";
+import "./Card.css";
 import japan from "./japan.svg.png";
 interface Country {
   name: string;
