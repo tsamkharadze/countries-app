@@ -1,47 +1,56 @@
 # CountryScope
 
+## 📝 Table of Contents
+
+- [About](#about)
+- [Technologies Used](#technologies_used)
+- [Getting Started](#getting_started)
+- [Webpage Preview](#webpage_preview)
+
+## 🧐 About <a name = "about"></a>
+
 CountryScope is a web application built with React and TypeScript that allows users to explore and learn about various countries around the world. The app features an intuitive interface, custom visual solutions, and a wealth of information on each country.
 
-## Features
+## 🤖 Technologies Used <a name="technologies_used"></a>
 
-- **Country Information**: View detailed information about each country, including population, area, capital, languages, and more.
-- **Search and Filter**: Easily search for countries and filter results based on different criteria.
-- **Responsive Design**: Optimized for both desktop and mobile devices.
+- **React:** A JavaScript library for building user interfaces.
+- **TypeScript:** A typed superset of JavaScript that compiles to plain JavaScript.
+- **Vite:** A build tool that provides a fast development environment.
 
-## Technologies Used
+### Other Technologies
 
-- **React**: A JavaScript library for building user interfaces.
-- **TypeScript**: A typed superset of JavaScript that compiles to plain JavaScript.
-- **Vite**: A build tool that provides a fast development environment.
+- **Git:** Distributed version control system for tracking changes.
 
-## Getting Started
+## 🏁 Getting Started <a name = "getting_started"></a>
 
-To get started with CountryScope, follow these steps:
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-1. Clone the repository:
+1. Clone the Repository:
 
    ```bash
-   git clone https://github.com/yourusername/countries-app.git
+   git clone https://github.com/tsamkharadze/countries-app.git
    ```
 
-2. Navigate to the project directory:
+2. Navigate to the Project Directory:
 
    ```bash
    cd countries-app
    ```
 
-3. Install the dependencies:
+3. Install the Dependencies:
 
    ```bash
    npm install
    ```
 
-4. Start the development server:
+4. Start the Development Server:
 
    ```bash
    npm run dev
    ```
 
-## Acknowledgments
+5. Open your browser and go to `http://localhost:3000` to view the app.
 
-- Thank you to all the open-source contributors and libraries that made this project possible.
+## 🌐 Webpage Preview <a name="webpage_preview"></a>
+
+Check out the live demo at [CountryScope Demo](https://main--countryscopedemo.netlify.app/).
