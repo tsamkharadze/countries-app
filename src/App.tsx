@@ -1,6 +1,6 @@
-import Header from "./header/Header";
-import Hero from "./hero/Hero";
-import Card from "./card/Card";
+import Header from "./components/header/Header";
+import Hero from "./components/hero/Hero";
+import Card from "./components/card/Card";
 
 function App() {
   return (
