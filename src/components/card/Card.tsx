@@ -1,4 +1,4 @@
-import styles from "./CountryCard.module.css";
+import styles from "./Card.module.css";
 import CardImage from "./card-image/CardImage";
 import CardHeader from "./card-header/CardHeader";
 import CardContent from "./card-content/CardContent";

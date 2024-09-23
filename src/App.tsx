@@ -1,7 +1,6 @@
 import Header from "./components/header/Header";
 import Hero from "./components/hero/Hero";
-// import Card from "./components/card/Card";
-import CountryCard from "./components/card/CountryCard";
+import CountryCard from "./components/card/Card";
 
 function App() {
   return (

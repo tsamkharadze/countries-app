@@ -1,6 +1,7 @@
+import React from "react";
 import styles from "./Hero.module.css";
 
-const Hero = () => {
+const Hero: React.FC = () => {
   return (
     <div className={styles.hero}>
       <div className={styles["hero-text"]}>

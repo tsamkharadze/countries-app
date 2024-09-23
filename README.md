@@ -49,8 +49,6 @@ These instructions will get you a copy of the project up and running on your loc
    npm run dev
    ```
 
-5. Open your browser and go to `http://localhost:3000` to view the app.
-
 ## 🌐 Webpage Preview <a name="webpage_preview"></a>
 
 Check out the live demo at [CountryScope Demo](https://main--countryscopedemo.netlify.app/).
