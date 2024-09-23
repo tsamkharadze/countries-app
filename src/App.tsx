@@ -1,6 +1,7 @@
 import Header from "./components/header/Header";
 import Hero from "./components/hero/Hero";
-import Card from "./components/card/Card";
+// import Card from "./components/card/Card";
+import CountryCard from "./components/card/CountryCard";
 
 function App() {
   return (
@@ -8,7 +9,7 @@ function App() {
       <div>
         <Header />
         <Hero />
-        <Card />
+        <CountryCard />
       </div>
     </>
   );

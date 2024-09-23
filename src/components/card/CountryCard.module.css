@@ -1,9 +1,10 @@
-.card-container {
+.cardContainer {
   background-color: rgb(249, 250, 250);
   padding: 50px 0;
   padding-left: 50px;
 }
-.country-card {
+
+.countryCard {
   text-align: center;
   border: 1px solid #ccc;
   width: 200px;
@@ -13,17 +14,8 @@
   overflow: hidden;
 }
 
-.country-card-flag {
-  width: 100%;
-}
-
-.country-card-text {
+.cardText {
   display: flex;
   flex-direction: column;
   gap: 5px;
-}
-.more-info {
-  color: #424200;
-  padding-top: 20px;
-  cursor: pointer;
 }

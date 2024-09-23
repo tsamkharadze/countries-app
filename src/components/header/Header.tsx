@@ -1,13 +1,14 @@
-import "./Header.css";
+import styles from "./Header.module.css";
 import logo from "./globe-2-svgrepo-com.svg";
+
 const Header = () => {
   return (
-    <div className="header">
-      <div className="logo">
-        <img src={logo} alt="logo" className="logo-img" />
+    <div className={styles.header}>
+      <div className={styles.logo}>
+        <img src={logo} alt="logo" className={styles["logo-img"]} />
         <p>CountryScope</p>
       </div>
-      <div className="nav">
+      <div className={styles.nav}>
         <p>Home</p>
         <p>Explore Countries</p>
         <p>Continents</p>
@@ -18,7 +19,7 @@ const Header = () => {
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="search"
+          className={styles.search}
         >
           <path
             strokeLinecap="round"
@@ -30,4 +31,5 @@ const Header = () => {
     </div>
   );
 };
+
 export default Header;
