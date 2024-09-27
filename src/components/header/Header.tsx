@@ -1,5 +1,8 @@
-import styles from "./Header.module.css";
-import logo from "./globe-2-svgrepo-com.svg";
+// import styles from "./Header.module.css";
+// import logo from "./globe-2-svgrepo-com.svg";
+
+import styles from "@/components/header/Header.module.css";
+import logo from "@/components/header/globe-2-svgrepo-com.svg";
 
 const Header: React.FC = () => {
   return (

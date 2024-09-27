@@ -1,10 +1,16 @@
-import styles from "./Card.module.css";
-import CardImage from "./card-image/CardImage";
-import CardHeader from "./card-header/CardHeader";
-import CardContent from "./card-content/CardContent";
-import CardFooter from "./card-footer/CardFooter";
-import japan from "./card-image/japan.svg.png";
+// import styles from "./Card.module.css";
+// import CardImage from "./card-image/CardImage";
+// import CardHeader from "./card-header/CardHeader";
+// import CardContent from "./card-content/CardContent";
+// import CardFooter from "./card-footer/CardFooter";
+// import japan from "./card-image/japan.svg.png";
 
+import styles from "@/components/card/Card.module.css";
+import CardImage from "@/components/card/card-image/CardImage";
+import CardHeader from "@/components/card/card-header/CardHeader";
+import CardContent from "@/components/card/card-content/CardContent";
+import CardFooter from "@/components/card/card-footer/CardFooter";
+import japan from "@/components/card/card-image/japan.svg.png";
 const CountryCard: React.FC = () => {
   const country = {
     name: "Japan",
@@ -22,7 +28,7 @@ const CountryCard: React.FC = () => {
             population={country.population}
             capital={country.capital}
           />
-          <CardFooter />
+          <CardFooter moreInfo="MORE INFO" />
         </div>
       </div>
     </div>

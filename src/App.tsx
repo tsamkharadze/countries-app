@@ -1,14 +1,15 @@
-import Header from "@/components/header/Header";
 import Hero from "@/components/hero/Hero";
 import CountryCard from "@/components/card/Card";
+import Layout from "@/components/layout";
 
 function App() {
   return (
     <>
       <div>
-        <Header />
-        <Hero />
-        <CountryCard />
+        <Layout>
+          <Hero />
+          <CountryCard />
+        </Layout>
       </div>
     </>
   );
