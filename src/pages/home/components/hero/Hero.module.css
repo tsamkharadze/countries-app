@@ -1,7 +1,7 @@
 .hero {
   color: #ffffee;
 
-  background-image: url(/src/components/hero/globe2.jpg);
+  background-image: url(/src/pages/home/components/hero/globe2.jpg);
   background-position: center;
   background-size: cover;
   height: 500px;

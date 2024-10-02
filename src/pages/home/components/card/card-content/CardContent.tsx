@@ -1,5 +1,4 @@
-// import styles from "./CardContent.module.css";
-import styles from "@/components/card/card-content/CardContent.module.css";
+import styles from "./CardContent.module.css";
 
 const CardContent: React.FC<{ population: number; capital: string }> = ({
   population,
