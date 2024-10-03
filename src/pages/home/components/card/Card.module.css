@@ -1,7 +1,12 @@
 .cardContainer {
-  background-color: rgb(249, 250, 250);
+  margin: 0 auto;
   padding: 50px 0;
-  padding-left: 50px;
+  width: 1280px;
+  background-color: rgb(249, 250, 250);
+  display: grid;
+  justify-items: center;
+  gap: 50px 10px;
+  grid-template-columns: auto auto auto auto;
 }
 
 .countryCard {
