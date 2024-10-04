@@ -4,6 +4,7 @@ import CardHeader from "./card-header/CardHeader";
 import CardContent from "./card-content/CardContent";
 import CardFooter from "./card-footer/CardFooter";
 import countriesList from "../../static/dummy-data";
+import Card from "./card/card";
 
 const CountryCard: React.FC = () => {
   // const country = {
@@ -14,7 +15,7 @@ const CountryCard: React.FC = () => {
 
   return (
     <div className={styles.cardContainer}>
-      <div className={styles.countryCard}>
+      <Card id={countriesList[0].id}>
         <CardImage
           src={countriesList[0].imageSrc}
           alt={countriesList[0].name}
@@ -24,8 +25,8 @@ const CountryCard: React.FC = () => {
           <CardContent {...countriesList[0]} />
           <CardFooter moreInfo="MORE INFO" />
         </div>
-      </div>
-      <div className={styles.countryCard}>
+      </Card>
+      <Card id={countriesList[1].id}>
         <CardImage
           src={countriesList[1].imageSrc}
           alt={countriesList[1].name}
@@ -35,8 +36,8 @@ const CountryCard: React.FC = () => {
           <CardContent {...countriesList[1]} />
           <CardFooter moreInfo="MORE INFO" />
         </div>
-      </div>
-      <div className={styles.countryCard}>
+      </Card>
+      <Card id={countriesList[2].id}>
         <CardImage
           src={countriesList[2].imageSrc}
           alt={countriesList[2].name}
@@ -46,8 +47,8 @@ const CountryCard: React.FC = () => {
           <CardContent {...countriesList[2]} />
           <CardFooter moreInfo="MORE INFO" />
         </div>
-      </div>
-      <div className={styles.countryCard}>
+      </Card>
+      <Card id={countriesList[3].id}>
         <CardImage
           src={countriesList[3].imageSrc}
           alt={countriesList[3].name}
@@ -57,7 +58,7 @@ const CountryCard: React.FC = () => {
           <CardContent {...countriesList[3]} />
           <CardFooter moreInfo="MORE INFO" />
         </div>
-      </div>
+      </Card>
     </div>
   );
 };

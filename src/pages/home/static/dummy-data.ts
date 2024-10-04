@@ -5,7 +5,7 @@ const countriesList = [
     name: "Japan",
     population: 125800000,
     capital: "Tokyo",
-    id: 1,
+    id: "1",
   },
   {
     imageSrc:
@@ -13,7 +13,7 @@ const countriesList = [
     name: "Germany",
     population: 83100000,
     capital: "Berlin",
-    id: 2,
+    id: "2",
   },
   {
     imageSrc:
@@ -21,7 +21,7 @@ const countriesList = [
     name: "Canada",
     population: 38000000,
     capital: "Ottawa",
-    id: 3,
+    id: "3",
   },
   {
     imageSrc:
@@ -29,7 +29,7 @@ const countriesList = [
     name: "Australia",
     population: 25690000,
     capital: "Canberra",
-    id: 4,
+    id: "4",
   },
 ];
 

@@ -5,6 +5,7 @@ import AboutVieW from "./pages/about/view";
 import ExploreCountriesView from "./pages/explore-countries/view";
 import Continents from "./pages/continents/view";
 import { Suspense } from "react";
+import CountryDetailView from "./pages/home/views/country-detail-view";
 
 function App() {
   return (
@@ -20,6 +21,17 @@ function App() {
                 </Suspense>
               }
             />
+            <Route
+              path="/"
+              element={
+                <Suspense fallback={<div>Loading...</div>}>
+                  <Homeview />
+                </Suspense>
+              }
+            />
+
+            <Route path="countries/:id" element={<CountryDetailView />} />
+
             <Route path="about" element={<AboutVieW />} />
             <Route path="explore" element={<ExploreCountriesView />} />
             <Route path="continents" element={<Continents />} />
