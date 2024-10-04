@@ -28,6 +28,9 @@ const Header: React.FC = () => {
         <NavLink className={handleActiveNav} to="continents">
           <p>Continents</p>
         </NavLink>
+        <NavLink className={handleActiveNav} to="contact">
+          <p>Contact</p>
+        </NavLink>
         <NavLink className={handleActiveNav} to="/about">
           <p>About</p>
         </NavLink>
