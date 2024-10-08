@@ -22,14 +22,6 @@ function App() {
                 </Suspense>
               }
             />
-            <Route
-              path="/"
-              element={
-                <Suspense fallback={<div>Loading...</div>}>
-                  <Homeview />
-                </Suspense>
-              }
-            />
 
             <Route path="explore" element={<ExploreCountriesView />} />
             <Route path="continents" element={<Continents />} />
