@@ -2,3 +2,8 @@
   font-size: 24px;
   margin-bottom: 10px;
 }
+.like {
+  cursor: pointer;
+  color: blue;
+  font-size: 12px;
+}
