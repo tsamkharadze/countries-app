@@ -1,36 +1,57 @@
+import { useState } from "react";
 import styles from "./contact.module.css";
 
 const Contact = () => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const [feedback, setFeedback] = useState<{
+    firstName: string;
+    lastName: string;
+    email: string;
+    message: string;
+  }>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    message: "",
+  });
 
-    const firstName = document.getElementById("firstname") as HTMLInputElement;
-    const lastName = document.getElementById("surname") as HTMLInputElement;
-    const email = document.getElementById("email") as HTMLInputElement;
-    const message = document.getElementById("message") as HTMLTextAreaElement;
-
-    const userFeedback = {
-      firstName: firstName.value,
-      lastName: lastName.value,
-      email: email.value,
-      message: message.value,
-    };
-
-    console.log("User Feedback:", userFeedback);
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFeedback((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(feedback);
+  };
   return (
     <>
       <form className={styles.form} onSubmit={handleSubmit}>
         <label>სახელი</label>
-        <input id="firstname" type="text" name="firstName" />
+        <input
+          name="firstName"
+          value={feedback.firstName}
+          onChange={handleChange}
+        />
         <label>გვარი</label>
-        <input id="surname" />
+        <input
+          name="lastName"
+          value={feedback.lastName}
+          onChange={handleChange}
+        />
         <label>Email</label>
-        <input id="email" />
+        <input name="email" value={feedback.email} onChange={handleChange} />
         <label>შეტყობინება</label>
-        <textarea id="message"></textarea>
-        <button type="submit"> SUBMIT</button>
+        <textarea
+          name="message"
+          value={feedback.message}
+          onChange={handleChange}
+        ></textarea>
+        <button type="submit">SUBMIT</button>
       </form>
     </>
   );
