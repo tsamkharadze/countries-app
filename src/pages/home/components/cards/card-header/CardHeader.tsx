@@ -8,7 +8,14 @@ const CardHeader: React.FC<{
   return (
     <h2 className={styles.cardHeader}>
       {name} - {likeCount}
-      <span className={styles.like} onClick={onLike}>
+      <span
+        className={styles.like}
+        onClick={(e) => {
+          e.preventDefault();
+
+          onLike();
+        }}
+      >
         Like
       </span>
     </h2>

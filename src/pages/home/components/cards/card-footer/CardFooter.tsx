@@ -1,14 +1,27 @@
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import styles from "./CardFooter.module.css";
 
-const CardFooter: React.FC<{ moreInfo: string; id: string }> = ({
+type CardFooterProps = {
+  moreInfo: string;
+  onDeleteCountry: () => void;
+};
+
+const CardFooter: React.FC<CardFooterProps> = ({
   moreInfo,
-  id,
+  onDeleteCountry,
 }) => {
   return (
-    <Link to={`/countries/${id}`}>
+    <div>
       <p className={styles.moreInfo}>{moreInfo}</p>
-    </Link>
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          onDeleteCountry();
+        }}
+      >
+        Delete Country
+      </button>
+    </div>
   );
 };
 

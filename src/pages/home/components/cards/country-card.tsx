@@ -4,49 +4,74 @@ import CardHeader from "./card-header/CardHeader";
 import CardContent from "./card-content/CardContent";
 import CardFooter from "./card-footer/CardFooter";
 import Card from "./card/card";
-import { useState } from "react";
-import countriesData from "../../static/dummy-data";
+import { FormEvent, useReducer } from "react";
+// import countriesData from "../../static/dummy-data";
+import AddCountryForm from "./add-country-form/add-country";
+import countriesInitialState from "./reducer/state";
+import { countriesReducer } from "./reducer/reducer";
 
 const CountryCard: React.FC = () => {
-  const [countriesList, setCountriesList] = useState<
-    {
-      imageSrc: string;
-      name: string;
-      capital: string;
-      population: number;
-      id: string;
-      like: number;
-    }[]
-  >(countriesData);
+  const [countriesList, dispatch] = useReducer(
+    countriesReducer,
+    countriesInitialState
+  );
 
   const handleLikeUp = (id: string) => {
     return () => {
-      const updatedCountriesList = countriesList.map((country) => {
-        if (country.id === id) {
-          return { ...country, like: country.like + 1 };
-        }
-        return country;
-      });
+      dispatch({ type: "like", payload: id });
 
-      setCountriesList(updatedCountriesList);
+      // setCountriesList(updatedCountriesList);
     };
   };
 
-  const handleSortByLikes = () => {
-    const sortedCountriesList = [...countriesList].sort(
-      (a, b) => b.like - a.like
-    );
-    setCountriesList(sortedCountriesList);
+  const handleSortByLikes = (sortType: "asc" | "desc") => () => {
+    dispatch({ type: "sort", payload: { sortType } });
+
+    // setCountriesList(sortedCountriesList);
   };
+
+  const handleCreateCountry = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const countryFields: any = {};
+
+    const formData = new FormData(e.currentTarget);
+    for (const [key, value] of formData) {
+      countryFields[key] = value;
+    }
+
+    dispatch({ type: "create", payload: { countryFields } });
+
+    // setCountriesList(changedCountriesList);
+    // console.log(countryFields);
+  };
+
+  const handleDeleteCountry = (id: string) => {
+    dispatch({ type: "delete", payload: { id } });
+
+    // setCountriesList(filteredCountryList);
+  };
+
+  // imageSrc: string;
+  // name: string;
+  // capital: string;
+  // population: number;
+  // id: string;
+  // like: number;
 
   return (
     <div>
-      <button onClick={handleSortByLikes} className={styles.sortButton}>
-        Sort by Likes
-      </button>
+      <div className={styles.manageCards}>
+        <div className={styles.sortButton}>
+          <button onClick={handleSortByLikes("asc")}>ascending</button>
+
+          <button onClick={handleSortByLikes("desc")}>descending</button>
+        </div>
+        <AddCountryForm onCreateCountry={handleCreateCountry} />
+      </div>
+
       <div className={styles.cardContainer}>
         {countriesList.map((country) => (
-          <Card key={country.id}>
+          <Card key={country.id} id={country.id}>
             <CardImage src={country.imageSrc} alt={country.name} />
             <div className={styles.cardText}>
               <CardHeader
@@ -55,7 +80,10 @@ const CountryCard: React.FC = () => {
                 {...country}
               />
               <CardContent {...country} />
-              <CardFooter id={country.id} moreInfo="MORE INFO" />
+              <CardFooter
+                moreInfo="MORE INFO"
+                onDeleteCountry={() => handleDeleteCountry(country.id)}
+              />
             </div>
           </Card>
         ))}

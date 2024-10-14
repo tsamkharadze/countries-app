@@ -1,4 +1,4 @@
-const countriesData = [
+const countriesInitialState = [
   {
     imageSrc:
       "https://upload.wikimedia.org/wikipedia/commons/9/9e/Flag_of_Japan.svg",
@@ -41,4 +41,4 @@ const countriesData = [
   },
 ];
 
-export default countriesData;
+export default countriesInitialState;
