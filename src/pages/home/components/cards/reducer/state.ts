@@ -8,6 +8,7 @@ const countriesInitialState = [
     id: "1",
     like: 0,
     deleted: false,
+    initialIndex: 1,
   },
   {
     imageSrc:
@@ -18,6 +19,7 @@ const countriesInitialState = [
     id: "2",
     like: 0,
     deleted: false,
+    initialIndex: 2,
   },
   {
     imageSrc:
@@ -28,6 +30,7 @@ const countriesInitialState = [
     id: "3",
     like: 0,
     deleted: false,
+    initialIndex: 3,
   },
   {
     imageSrc:
@@ -38,6 +41,7 @@ const countriesInitialState = [
     id: "4",
     like: 0,
     deleted: false,
+    initialIndex: 4,
   },
 ];
 

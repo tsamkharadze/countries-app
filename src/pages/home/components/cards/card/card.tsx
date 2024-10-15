@@ -1,12 +1,27 @@
 import { Link } from "react-router-dom";
 import styles from "./card.module.css";
 
-const Card: React.FC<
-  React.PropsWithChildren<{ id: string; className?: string }>
-> = ({ children, id, className }) => {
+type CardProps = {
+  id: string;
+  className?: string;
+  deleted?: boolean;
+};
+
+const Card: React.FC<React.PropsWithChildren<CardProps>> = ({
+  children,
+  id,
+  className,
+  deleted = false,
+}) => {
   return (
     <Link to={`/countries/${id}`}>
-      <div className={`${styles.card} ${className}`}>{children}</div>
+      <div
+        className={`${styles.card} ${className} ${
+          deleted ? styles.deletedCard : ""
+        }`}
+      >
+        {children}
+      </div>
     </Link>
   );
 };

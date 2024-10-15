@@ -51,6 +51,10 @@ const CountryCard: React.FC = () => {
     // setCountriesList(filteredCountryList);
   };
 
+  const handleRestoreCountry = (id: string) => {
+    dispatch({ type: "restore", payload: { id } });
+  };
+
   // imageSrc: string;
   // name: string;
   // capital: string;
@@ -71,7 +75,7 @@ const CountryCard: React.FC = () => {
 
       <div className={styles.cardContainer}>
         {countriesList.map((country) => (
-          <Card key={country.id} id={country.id}>
+          <Card key={country.id} id={country.id} deleted={country.deleted}>
             <CardImage src={country.imageSrc} alt={country.name} />
             <div className={styles.cardText}>
               <CardHeader
@@ -83,6 +87,8 @@ const CountryCard: React.FC = () => {
               <CardFooter
                 moreInfo="MORE INFO"
                 onDeleteCountry={() => handleDeleteCountry(country.id)}
+                onRestoreCountry={() => handleRestoreCountry(country.id)}
+                isDeleted={country.deleted}
               />
             </div>
           </Card>

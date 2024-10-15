@@ -5,10 +5,12 @@ type countriesReducerInitialState = {
   population: number;
   id: string;
   like: number;
+  deleted?: boolean;
+  initialIndex?: number;
 }[];
 
 type countriesReducerAction = {
-  type: "like" | "sort" | "create" | "delete";
+  type: "like" | "sort" | "create" | "delete" | "restore";
   payload: any;
 };
 export const countriesReducer = (
@@ -26,15 +28,12 @@ export const countriesReducer = (
     return updatedCountriesList;
   }
   if (action.type === "sort") {
-    const sortedCountriesList = [...countriesList];
-    if (action.payload.sortType === "asc") {
-      sortedCountriesList.sort((a, b) => a.like - b.like);
-      return sortedCountriesList;
-    }
-    if (action.payload.sortType === "desc") {
-      sortedCountriesList.sort((a, b) => b.like - a.like);
-      return sortedCountriesList;
-    }
+    const sortedCountriesList = [...countriesList].sort((a, b) => {
+      return action.payload.sortType === "asc"
+        ? a.like - b.like
+        : b.like - a.like;
+    });
+    return sortedCountriesList;
   }
   if (action.type === "create") {
     const changedCountriesList = [
@@ -44,16 +43,52 @@ export const countriesReducer = (
         imageSrc:
           "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Flag_of_Georgia.svg/1599px-Flag_of_Georgia.svg.png?20231228212034",
         like: 0,
-        id: (Number(countriesList.at(-1)?.id) + 1).toString(),
+        // id: (Number(countriesList.at(-1)?.id) + 1).toString(),
+        id: `country-${Date.now()}-${Math.random()}`, // Unique ID generation
+        deleted: false,
+        initialIndex: countriesList.length + 1,
       },
     ];
+    console.log(changedCountriesList);
     return changedCountriesList;
   }
   if (action.type === "delete") {
-    const filteredCountryList = countriesList.filter((country) => {
-      return country.id !== action.payload.id;
-    });
-    return filteredCountryList;
+    const countryIndex = countriesList.findIndex(
+      (country) => country.id === action.payload.id
+    );
+
+    const updatedCountriesList = [
+      ...countriesList.slice(0, countryIndex), // All countries before the one to be deleted
+      ...countriesList.slice(countryIndex + 1), // All countries after the one to be deleted
+      {
+        ...countriesList[countryIndex],
+        deleted: true,
+        initialIndex: countryIndex,
+      },
+    ];
+
+    return updatedCountriesList;
   }
+
+  if (action.type === "restore") {
+    const countryToRestore = countriesList.find(
+      (country) => country.id === action.payload.id && country.deleted
+    );
+
+    if (countryToRestore && countryToRestore.initialIndex !== undefined) {
+      const updatedCountriesList = [...countriesList];
+      const index = updatedCountriesList.indexOf(countryToRestore);
+
+      updatedCountriesList.splice(index, 1);
+
+      updatedCountriesList.splice(countryToRestore.initialIndex, 0, {
+        ...countryToRestore,
+        deleted: false, // Restore the country
+      });
+
+      return updatedCountriesList;
+    }
+  }
+
   return countriesList;
 };
