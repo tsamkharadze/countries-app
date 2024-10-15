@@ -18,7 +18,7 @@ const CountryCard: React.FC = () => {
 
   const handleLikeUp = (id: string) => {
     return () => {
-      dispatch({ type: "like", payload: id });
+      dispatch({ type: "like", payload: { id } });
 
       // setCountriesList(updatedCountriesList);
     };

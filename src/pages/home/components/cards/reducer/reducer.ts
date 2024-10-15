@@ -19,7 +19,7 @@ export const countriesReducer = (
 ) => {
   if (action.type === "like") {
     const updatedCountriesList = countriesList.map((country) => {
-      if (country.id === action.payload) {
+      if (country.id === action.payload.id) {
         return { ...country, like: country.like + 1 };
       }
       return { ...country };
@@ -44,7 +44,7 @@ export const countriesReducer = (
           "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Flag_of_Georgia.svg/1599px-Flag_of_Georgia.svg.png?20231228212034",
         like: 0,
         // id: (Number(countriesList.at(-1)?.id) + 1).toString(),
-        id: `country-${Date.now()}-${Math.random()}`, // Unique ID generation
+        id: `country-${Date.now()}-${Math.random()}`,
         deleted: false,
         initialIndex: countriesList.length + 1,
       },
@@ -58,8 +58,8 @@ export const countriesReducer = (
     );
 
     const updatedCountriesList = [
-      ...countriesList.slice(0, countryIndex), // All countries before the one to be deleted
-      ...countriesList.slice(countryIndex + 1), // All countries after the one to be deleted
+      ...countriesList.slice(0, countryIndex),
+      ...countriesList.slice(countryIndex + 1),
       {
         ...countriesList[countryIndex],
         deleted: true,
