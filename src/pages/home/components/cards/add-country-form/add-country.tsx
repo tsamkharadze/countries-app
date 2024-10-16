@@ -21,7 +21,6 @@ const AddCountryForm: React.FC<AddCountryFormProps> = ({ onCreateCountry }) => {
   const handleChangeName = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
-    console.log(value);
     // (() => countryName.length > 15 ? setFieldErrorMsg('sss') : setFieldErrorMsg(''))();
 
     if (name.length > 15) {
@@ -54,7 +53,6 @@ const AddCountryForm: React.FC<AddCountryFormProps> = ({ onCreateCountry }) => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(name);
     onCreateCountry({ name, capital, population });
   };
 

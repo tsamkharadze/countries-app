@@ -5,7 +5,6 @@ import CardContent from "./card-content/CardContent";
 import CardFooter from "./card-footer/CardFooter";
 import Card from "./card/card";
 import { useReducer } from "react";
-// import countriesData from "../../static/dummy-data";
 import AddCountryForm from "./add-country-form/add-country";
 import countriesInitialState from "./reducer/state";
 import { countriesReducer } from "./reducer/reducer";
@@ -19,15 +18,11 @@ const CountryCard: React.FC = () => {
   const handleLikeUp = (id: string) => {
     return () => {
       dispatch({ type: "like", payload: { id } });
-
-      // setCountriesList(updatedCountriesList);
     };
   };
 
   const handleSortByLikes = (sortType: "asc" | "desc") => () => {
     dispatch({ type: "sort", payload: { sortType } });
-
-    // setCountriesList(sortedCountriesList);
   };
 
   const handleCreateCountry = (countryFields: {
@@ -36,27 +31,15 @@ const CountryCard: React.FC = () => {
     population: string;
   }) => {
     dispatch({ type: "create", payload: { countryFields } });
-
-    // setCountriesList(changedCountriesList);
-    // console.log(countryFields);
   };
 
   const handleDeleteCountry = (id: string) => {
     dispatch({ type: "delete", payload: { id } });
-
-    // setCountriesList(filteredCountryList);
   };
 
   const handleRestoreCountry = (id: string) => {
     dispatch({ type: "restore", payload: { id } });
   };
-
-  // imageSrc: string;
-  // name: string;
-  // capital: string;
-  // population: number;
-  // id: string;
-  // like: number;
 
   return (
     <div>
