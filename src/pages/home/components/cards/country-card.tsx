@@ -4,7 +4,7 @@ import CardHeader from "./card-header/CardHeader";
 import CardContent from "./card-content/CardContent";
 import CardFooter from "./card-footer/CardFooter";
 import Card from "./card/card";
-import { FormEvent, useReducer } from "react";
+import { useReducer } from "react";
 // import countriesData from "../../static/dummy-data";
 import AddCountryForm from "./add-country-form/add-country";
 import countriesInitialState from "./reducer/state";
@@ -30,15 +30,11 @@ const CountryCard: React.FC = () => {
     // setCountriesList(sortedCountriesList);
   };
 
-  const handleCreateCountry = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const countryFields: any = {};
-
-    const formData = new FormData(e.currentTarget);
-    for (const [key, value] of formData) {
-      countryFields[key] = value;
-    }
-
+  const handleCreateCountry = (countryFields: {
+    name: string;
+    capital: string;
+    population: string;
+  }) => {
     dispatch({ type: "create", payload: { countryFields } });
 
     // setCountriesList(changedCountriesList);
