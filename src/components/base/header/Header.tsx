@@ -1,53 +1,66 @@
 import styles from "@/components/base/header/Header.module.css";
 import logo from "@/components/base/header/globe-2-svgrepo-com.svg";
+import LanguageSwitcher from "@/layout/default/language-switcher/languageSwitcher";
 import { Link, NavLink, NavLinkRenderProps } from "react-router-dom";
 
-const Header: React.FC = () => {
+type Language = "ka" | "en";
+
+type HeaderProps = {
+  lang: Language;
+  onLanguageChange: (newLang: Language) => void;
+};
+
+const translations = {
+  ka: {
+    home: "მთავარი",
+    explore: "გაეცანი",
+    continents: "კონტინენტები",
+    contact: "კონტაქტი",
+    about: "ჩვენს შესახებ",
+  },
+  en: {
+    home: "Home",
+    explore: "Explore Countries",
+    continents: "Continents",
+    contact: "Contact",
+    about: "About Us",
+  },
+};
+
+const Header: React.FC<HeaderProps> = ({ lang, onLanguageChange }) => {
   const handleActiveNav = (props: NavLinkRenderProps) => {
     const { isActive } = props;
-
     return isActive ? styles["active-nav"] : styles["nav"];
   };
 
   return (
     <div className={styles.header}>
       <div>
-        <Link className={styles.logo} to="/">
+        <Link className={styles.logo} to={`/${lang}/home`}>
           <img src={logo} alt="logo" className={styles["logo-img"]} />
-
           <p>CountryScope</p>
         </Link>
       </div>
       <div className={styles.nav}>
-        <NavLink className={handleActiveNav} to="/">
-          <p>Home</p>
+        <NavLink className={handleActiveNav} to={`/${lang}/home`}>
+          <p>{translations[lang].home}</p>
         </NavLink>
-        <NavLink className={handleActiveNav} to="explore">
-          <p>Explore Countries</p>
+        <NavLink className={handleActiveNav} to={`/${lang}/explore`}>
+          <p>{translations[lang].explore}</p>
         </NavLink>
-        <NavLink className={handleActiveNav} to="continents">
-          <p>Continents</p>
+        <NavLink className={handleActiveNav} to={`/${lang}/continents`}>
+          <p>{translations[lang].continents}</p>
         </NavLink>
-        <NavLink className={handleActiveNav} to="contact">
-          <p>Contact</p>
+        <NavLink className={handleActiveNav} to={`/${lang}/contact`}>
+          <p>{translations[lang].contact}</p>
         </NavLink>
-        <NavLink className={handleActiveNav} to="/about">
-          <p>About</p>
+        <NavLink className={handleActiveNav} to={`/${lang}/about`}>
+          <p>{translations[lang].about}</p>
         </NavLink>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className={styles.search}
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-          />
-        </svg>
+        <LanguageSwitcher
+          currentLang={lang}
+          onLanguageChange={onLanguageChange}
+        />
       </div>
     </div>
   );

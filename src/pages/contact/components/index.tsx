@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styles from "./contact.module.css";
+import { useParams } from "react-router-dom";
 
 const Contact = () => {
   const [feedback, setFeedback] = useState<{
@@ -28,30 +29,50 @@ const Contact = () => {
     e.preventDefault();
     console.log(feedback);
   };
+
+  const translate = {
+    ka: {
+      name: "სახელი",
+      surname: "გვარი",
+      email: "ელ-ფოსტა",
+      message: "შეტყობინება",
+      submit: "გაგზავნა",
+    },
+    en: {
+      name: "Name",
+      surname: "Surname",
+      email: "Email",
+      message: "Message",
+      submit: "Submit",
+    },
+  };
+
+  const { lang } = useParams<{ lang: "ka" | "en" }>();
+  const currentLang = lang || "en";
   return (
     <>
       <form className={styles.form} onSubmit={handleSubmit}>
-        <label>სახელი</label>
+        <label>{translate[currentLang].name}</label>
         <input
           name="firstName"
           value={feedback.firstName}
           onChange={handleChange}
         />
-        <label>გვარი</label>
+        <label>{translate[currentLang].surname}</label>
         <input
           name="lastName"
           value={feedback.lastName}
           onChange={handleChange}
         />
-        <label>Email</label>
+        <label>{translate[currentLang].email}</label>
         <input name="email" value={feedback.email} onChange={handleChange} />
-        <label>შეტყობინება</label>
+        <label>{translate[currentLang].message}</label>
         <textarea
           name="message"
           value={feedback.message}
           onChange={handleChange}
         ></textarea>
-        <button type="submit">SUBMIT</button>
+        <button type="submit">{translate[currentLang].submit}</button>
       </form>
     </>
   );

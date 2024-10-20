@@ -1,5 +1,13 @@
+import { useParams } from "react-router-dom";
+
 const AboutDescription = () => {
-  return <div>This is about</div>;
+  const { lang } = useParams<{ lang: "ka" | "en" }>();
+  const currentLang = lang || "en";
+  return (
+    <div>
+      {currentLang === "ka" ? "ეს არის about სექცია" : "this is an about"}
+    </div>
+  );
 };
 
 export default AboutDescription;

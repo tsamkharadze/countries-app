@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Homeview from "./pages/home/views/home";
 import DefaultLayout from "./layout/default";
 import AboutVieW from "./pages/about/view";
@@ -10,28 +10,26 @@ import ContactView from "./pages/contact/view";
 
 function App() {
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route element={<DefaultLayout />}>
-            <Route
-              path="/"
-              element={
-                <Suspense fallback={<div>Loading...</div>}>
-                  <Homeview />
-                </Suspense>
-              }
-            />
-
-            <Route path="explore" element={<ExploreCountriesView />} />
-            <Route path="continents" element={<Continents />} />
-            <Route path="contact" element={<ContactView />} />
-            <Route path="about" element={<AboutVieW />} />
-            <Route path="countries/:id" element={<CountryDetailView />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/:lang" element={<DefaultLayout />}>
+          <Route
+            path="home"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <Homeview />
+              </Suspense>
+            }
+          />
+          <Route path="explore" element={<ExploreCountriesView />} />
+          <Route path="continents" element={<Continents />} />
+          <Route path="contact" element={<ContactView />} />
+          <Route path="about" element={<AboutVieW />} />
+          <Route path="countries/:id" element={<CountryDetailView />} />
+        </Route>
+        <Route path="/" element={<Navigate to="/ka/home" />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
