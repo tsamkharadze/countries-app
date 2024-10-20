@@ -2,14 +2,12 @@ import { useParams } from "react-router-dom";
 import styles from "./CardFooter.module.css";
 
 type CardFooterProps = {
-  moreInfo: string;
   onDeleteCountry: () => void;
   onRestoreCountry: () => void;
   isDeleted: boolean;
 };
 
 const CardFooter: React.FC<CardFooterProps> = ({
-  moreInfo,
   onDeleteCountry,
   onRestoreCountry,
   isDeleted,
@@ -19,7 +17,9 @@ const CardFooter: React.FC<CardFooterProps> = ({
 
   return (
     <div>
-      <p className={styles.moreInfo}>{moreInfo}</p>
+      <p className={styles.moreInfo}>
+        {currentLang === "ka" ? "მეტი" : "MORE"}
+      </p>
       {!isDeleted ? (
         <button
           onClick={(e) => {

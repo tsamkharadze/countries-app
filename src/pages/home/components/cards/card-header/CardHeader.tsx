@@ -12,11 +12,10 @@ const CardHeader: React.FC<{
         className={styles.like}
         onClick={(e) => {
           e.preventDefault();
-
           onLike();
         }}
       >
-        Like
+        👍{" "}
       </span>
     </h2>
   );

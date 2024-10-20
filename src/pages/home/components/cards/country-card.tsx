@@ -8,8 +8,11 @@ import { useReducer } from "react";
 import AddCountryForm from "./add-country-form/add-country";
 import countriesInitialState from "./reducer/state";
 import { countriesReducer } from "./reducer/reducer";
+import { useParams } from "react-router-dom";
 
 const CountryCard: React.FC = () => {
+  const { lang } = useParams<{ lang: "ka" | "en" }>();
+
   const [countriesList, dispatch] = useReducer(
     countriesReducer,
     countriesInitialState
@@ -59,11 +62,10 @@ const CountryCard: React.FC = () => {
               <CardHeader
                 onLike={handleLikeUp(country.id)}
                 likeCount={country.like}
-                {...country}
+                name={lang === "ka" ? country.nameka : country.nameen}
               />
               <CardContent {...country} />
               <CardFooter
-                moreInfo="MORE INFO"
                 onDeleteCountry={() => handleDeleteCountry(country.id)}
                 onRestoreCountry={() => handleRestoreCountry(country.id)}
                 isDeleted={country.deleted}

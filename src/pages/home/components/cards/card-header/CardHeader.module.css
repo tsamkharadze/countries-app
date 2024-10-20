@@ -1,9 +1,11 @@
 .cardHeader {
   font-size: 24px;
   margin-bottom: 10px;
+  padding: 0 15px;
 }
 .like {
   cursor: pointer;
   color: blue;
   font-size: 12px;
+  padding: 10px;
 }
