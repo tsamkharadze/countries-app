@@ -45,9 +45,8 @@ const CountryCard: React.FC = () => {
     <div>
       <div className={styles.manageCards}>
         <div className={styles.sortButton}>
-          <button onClick={handleSortByLikes("asc")}>ascending</button>
-
-          <button onClick={handleSortByLikes("desc")}>descending</button>
+          <button onClick={handleSortByLikes("asc")}>⬆️</button>
+          <button onClick={handleSortByLikes("desc")}>⬇️</button>
         </div>
         <AddCountryForm onCreateCountry={handleCreateCountry} />
       </div>

@@ -1,4 +1,4 @@
-// import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styles from "./CardFooter.module.css";
 
 type CardFooterProps = {
@@ -14,6 +14,9 @@ const CardFooter: React.FC<CardFooterProps> = ({
   onRestoreCountry,
   isDeleted,
 }) => {
+  const { lang } = useParams<{ lang: "ka" | "en" }>();
+  const currentLang = lang || "en";
+
   return (
     <div>
       <p className={styles.moreInfo}>{moreInfo}</p>
@@ -24,7 +27,7 @@ const CardFooter: React.FC<CardFooterProps> = ({
             onDeleteCountry();
           }}
         >
-          Delete Country
+          {currentLang === "ka" ? "ქვეყნის წაშლა" : "Delete Country"}
         </button>
       ) : (
         <button
@@ -33,7 +36,7 @@ const CardFooter: React.FC<CardFooterProps> = ({
             onRestoreCountry();
           }}
         >
-          Restore Country
+          {currentLang === "ka" ? "ქვეყნის აღდგენა" : " Restore Country"}
         </button>
       )}
     </div>
