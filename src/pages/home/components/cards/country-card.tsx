@@ -64,7 +64,10 @@ const CountryCard: React.FC = () => {
                 likeCount={country.like}
                 name={lang === "ka" ? country.nameka : country.nameen}
               />
-              <CardContent {...country} />
+              <CardContent
+                population={country.population}
+                capital={lang === "ka" ? country.capitalKA : country.capital}
+              />
               <CardFooter
                 onDeleteCountry={() => handleDeleteCountry(country.id)}
                 onRestoreCountry={() => handleRestoreCountry(country.id)}

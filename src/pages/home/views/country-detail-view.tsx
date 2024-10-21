@@ -18,8 +18,8 @@ const CountryDetailView: React.FC = () => {
       <p>{country.population}</p>
       <p>
         {lang === "ka"
-          ? `დედაქალაქი: ${country.nameka}`
-          : `Capital: ${country.nameen}`}
+          ? `დედაქალაქი: ${country.capitalKA}`
+          : `Capital: ${country.capital}`}
       </p>
     </div>
   );
