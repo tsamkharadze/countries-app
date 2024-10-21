@@ -16,7 +16,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
 
   return (
     <button onClick={toggleLanguage}>
-      Switch to {currentLang === "ka" ? "English" : "Georgian"}
+      {currentLang === "ka" ? "EN" : "KA"}
     </button>
   );
 };
