@@ -18,10 +18,8 @@ const CountryCard: React.FC = () => {
     countriesInitialState
   );
 
-  const handleLikeUp = (id: string) => {
-    return () => {
-      dispatch({ type: "like", payload: { id } });
-    };
+  const handleLikeUp = (id: string) => () => {
+    dispatch({ type: "like", payload: { id } });
   };
 
   const handleSortByLikes = (sortType: "asc" | "desc") => () => {
@@ -29,10 +27,12 @@ const CountryCard: React.FC = () => {
   };
 
   const handleCreateCountry = (countryFields: {
-    name: string;
-    capital: string;
+    nameKa: string;
+    capitalKa: string;
     population: string;
+    image: string;
   }) => {
+    console.log(countryFields);
     dispatch({ type: "create", payload: { countryFields } });
   };
 
@@ -43,7 +43,7 @@ const CountryCard: React.FC = () => {
   const handleRestoreCountry = (id: string) => {
     dispatch({ type: "restore", payload: { id } });
   };
-
+  console.log(countriesList);
   return (
     <div>
       <div className={styles.manageCards}>
@@ -55,27 +55,34 @@ const CountryCard: React.FC = () => {
       </div>
 
       <div className={styles.cardContainer}>
-        {countriesList.map((country) => (
-          <Card key={country.id} id={country.id} deleted={country.deleted}>
-            <CardImage src={country.imageSrc} alt={country.name} />
-            <div className={styles.cardText}>
-              <CardHeader
-                onLike={handleLikeUp(country.id)}
-                likeCount={country.like}
-                name={lang === "ka" ? country.nameka : country.nameen}
+        {countriesList.map((country) => {
+          return (
+            <Card key={country.id} id={country.id} deleted={country.deleted}>
+              <CardImage
+                src={country.imageSrc}
+                alt={country.nameKa || country.nameEn}
               />
-              <CardContent
-                population={country.population}
-                capital={lang === "ka" ? country.capitalKA : country.capital}
-              />
-              <CardFooter
-                onDeleteCountry={() => handleDeleteCountry(country.id)}
-                onRestoreCountry={() => handleRestoreCountry(country.id)}
-                isDeleted={country.deleted}
-              />
-            </div>
-          </Card>
-        ))}
+              <div className={styles.cardText}>
+                <CardHeader
+                  onLike={handleLikeUp(country.id)}
+                  likeCount={country.like}
+                  name={lang === "ka" ? country.nameKa : country.nameEn}
+                />
+                <CardContent
+                  population={country.population}
+                  capital={
+                    lang === "ka" ? country.capitalKa : country.capitalEn
+                  }
+                />
+                <CardFooter
+                  onDeleteCountry={() => handleDeleteCountry(country.id)}
+                  onRestoreCountry={() => handleRestoreCountry(country.id)}
+                  isDeleted={country.deleted}
+                />
+              </div>
+            </Card>
+          );
+        })}
       </div>
     </div>
   );

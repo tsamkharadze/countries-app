@@ -2,8 +2,8 @@ const countriesInitialState = [
   {
     imageSrc:
       "https://upload.wikimedia.org/wikipedia/commons/9/9e/Flag_of_Japan.svg",
-    nameka: "იაპონია",
-    nameen: "Japan",
+    nameKa: "იაპონია",
+    nameEn: "Japan",
     population: 125800000,
     capital: "Tokyo",
     capitalKA: "ტოკიო",
@@ -15,12 +15,12 @@ const countriesInitialState = [
   {
     imageSrc:
       "https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg",
-    nameka: "გერმანია",
+    nameKa: "გერმანია",
 
-    nameen: "Germany",
+    nameEn: "Germany",
     population: 83100000,
     capital: "Berlin",
-    capitalKA: "ბერლინი",
+    capitalKa: "ბერლინი",
 
     id: "2",
     like: 0,
@@ -30,12 +30,12 @@ const countriesInitialState = [
   {
     imageSrc:
       "https://upload.wikimedia.org/wikipedia/en/c/cf/Flag_of_Canada.svg",
-    nameka: "კანადა",
+    nameKa: "კანადა",
 
-    nameen: "Canada",
+    nameEn: "Canada",
     population: 38000000,
     capital: "Ottawa",
-    capitalKA: "ოტავა",
+    capitalKa: "ოტავა",
     id: "3",
     like: 0,
     deleted: false,
@@ -44,9 +44,9 @@ const countriesInitialState = [
   {
     imageSrc:
       "https://upload.wikimedia.org/wikipedia/commons/b/b9/Flag_of_Australia.svg",
-    nameka: "ავსტრალია",
+    nameKa: "ავსტრალია",
 
-    nameen: "Australia",
+    nameEn: "Australia",
     population: 25690000,
     capital: "Canberra",
     capitalKA: "კანბერა",

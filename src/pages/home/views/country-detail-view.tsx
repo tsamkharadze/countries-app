@@ -14,7 +14,7 @@ const CountryDetailView: React.FC = () => {
 
   return (
     <div>
-      <h1>{lang === "ka" ? country.nameka : country.nameen}</h1>
+      <h1>{lang === "ka" ? country.nameKa : country.nameEn}</h1>
       <p>{country.population}</p>
       <p>
         {lang === "ka"

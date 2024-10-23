@@ -1,6 +1,6 @@
 type countriesReducerInitialState = {
   imageSrc: string;
-  name: string;
+  nameEn: string;
   capital: string;
   population: number;
   id: string;
@@ -40,8 +40,10 @@ export const countriesReducer = (
       ...countriesList,
       {
         ...action.payload.countryFields,
-        imageSrc:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/Flag_of_Georgia.svg/1599px-Flag_of_Georgia.svg.png?20231228212034",
+        nameKa: action.payload.countryFields.nameKa,
+        capitalKa: action.payload.countryFields.capitalKa,
+        imageSrc: action.payload.countryFields.image,
+
         like: 0,
         // id: (Number(countriesList.at(-1)?.id) + 1).toString(),
         id: `country-${Date.now()}-${Math.random()}`,
@@ -49,6 +51,7 @@ export const countriesReducer = (
         initialIndex: countriesList.length + 1,
       },
     ];
+
     console.log(changedCountriesList);
     return changedCountriesList;
   }
@@ -67,6 +70,7 @@ export const countriesReducer = (
       },
     ];
 
+    console.log(updatedCountriesList);
     return updatedCountriesList;
   }
 
