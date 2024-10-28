@@ -5,7 +5,6 @@ const CardHeader: React.FC<{
   likeCount: number;
   onLike: () => void;
 }> = ({ name, likeCount, onLike }) => {
-  console.log(name);
   return (
     <h2 className={styles.cardHeader}>
       {name} - {likeCount}

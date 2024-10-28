@@ -1,6 +1,5 @@
 import React, { ChangeEvent, FormEvent, useCallback, useState } from "react";
 import styles from "./add-country-form.module.css";
-// import { useParams } from "react-router-dom";
 
 type AddCountryFormProps = {
   onCreateCountry: (countryFields: {
@@ -8,8 +7,8 @@ type AddCountryFormProps = {
     nameEn: string;
     capitalKa: string;
     capitalEn: string;
-    population: string;
-    image: string;
+    population: number; // Ensure this is a number
+    imageSrc: string;
   }) => void;
 };
 
@@ -27,67 +26,41 @@ const AddCountryForm: React.FC<AddCountryFormProps> = ({ onCreateCountry }) => {
   const [nameEn, setNameEn] = useState("");
   const [capitalKa, setCapitalKa] = useState("");
   const [capitalEn, setCapitalEn] = useState("");
-  const [population, setPopulation] = useState("");
+  const [population, setPopulation] = useState<number>(0); // Set initial value to a number
+  const [inputLang, setInputLang] = useState("ka");
 
   const [capitalFieldErrorMsg, setCapitalFieldErrorMsg] = useState("");
   const [countryNameErrorMsg, setCountryNameErrorMsg] = useState("");
-  const [populationFieldErrorMsg, setPopulationFieldErrorMsg] = useState("");
-  const [inputLang, setInputLang] = useState("ka");
 
   const handleChangeNameKa = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setNameKa(value);
-
-    // (() => countryName.length > 15 ? setFieldErrorMsg('sss') : setFieldErrorMsg(''))();
-
-    if (value.length > 15) {
-      setCountryNameErrorMsg("Max 15 Letter!");
-    } else {
-      setCountryNameErrorMsg("");
-    }
+    setCountryNameErrorMsg(value.length > 15 ? "Max 15 Letter!" : "");
   };
 
   const handleChangeNameEn = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setNameEn(value);
-
-    // (() => countryName.length > 15 ? setFieldErrorMsg('sss') : setFieldErrorMsg(''))();
-
-    if (value.length > 15) {
-      setCountryNameErrorMsg("Max 15 Letter!");
-    } else {
-      setCountryNameErrorMsg("");
-    }
+    setCountryNameErrorMsg(value.length > 15 ? "Max 15 Letter!" : "");
   };
 
   const handleChangeCapitalKa = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setCapitalKa(value);
-
-    if (value.length > 15) {
-      setCapitalFieldErrorMsg("Max 15 Letter!");
-    } else {
-      setCapitalFieldErrorMsg("");
-    }
+    setCapitalFieldErrorMsg(value.length > 15 ? "Max 15 Letter!" : "");
   };
+
   const handleChangeCapitalEn = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setCapitalEn(value);
-
-    if (value.length > 15) {
-      setCapitalFieldErrorMsg("Max 15 Letter!");
-    } else {
-      setCapitalFieldErrorMsg("");
-    }
+    setCapitalFieldErrorMsg(value.length > 15 ? "Max 15 Letter!" : "");
   };
+
   const handleChangepopulation = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setPopulation(value);
-
-    if (value.length > 10) {
-      setPopulationFieldErrorMsg("Max 10 Number!");
-    } else {
-      setPopulationFieldErrorMsg("");
+    const numValue = Number(value);
+    if (!isNaN(numValue)) {
+      setPopulation(numValue); // Set population as a number
     }
   };
 
@@ -99,7 +72,7 @@ const AddCountryForm: React.FC<AddCountryFormProps> = ({ onCreateCountry }) => {
       capitalKa,
       capitalEn,
       population,
-      image,
+      imageSrc,
     });
   };
 
@@ -107,7 +80,7 @@ const AddCountryForm: React.FC<AddCountryFormProps> = ({ onCreateCountry }) => {
     setInputLang(lang);
   };
 
-  const [image, setImage] = useState<string>("");
+  const [imageSrc, setImageSrc] = useState<string>("");
 
   const handleFileUpload = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,16 +88,14 @@ const AddCountryForm: React.FC<AddCountryFormProps> = ({ onCreateCountry }) => {
       if (file) {
         const reader = new FileReader();
         reader.onloadend = () => {
-          setImage(reader.result as string);
+          setImageSrc(reader.result as string);
         };
         reader.readAsDataURL(file);
       }
     },
-    []
+    [],
   );
 
-  // const { lang } = useParams<{ lang: "ka" | "en" }>();
-  // const currentLang = lang || inputLang;
   return (
     <div className={styles.addCountryFieldsContainer}>
       <div className={styles.addCountryFieldsLangToogle}>
@@ -175,11 +146,11 @@ const AddCountryForm: React.FC<AddCountryFormProps> = ({ onCreateCountry }) => {
 
         <label>{inputLang === "ka" ? "მოსახლეობა" : "Population"}</label>
         <input
-          value={population}
+          type="number" // Set input type to number
+          value={population === 0 ? "" : population} // Show empty string if population is 0
           onChange={handleChangepopulation}
           name="population"
         />
-        <span className={styles.errorMsg}>{populationFieldErrorMsg}</span>
 
         <input
           className={styles.imgUpload}

@@ -1,15 +1,13 @@
 import { useParams } from "react-router-dom";
-// import countriesList from "../static/dummy-data";
 import countriesInitialState from "../components/cards/reducer/state";
-const CountryDetailView: React.FC = () => {
-  const { id } = useParams();
-  const country = countriesInitialState.find((country) => country.id == id);
 
-  const { lang } = useParams();
+const CountryDetailView: React.FC = () => {
+  const { id, lang } = useParams(); // Destructure lang from useParams
+  const country = countriesInitialState.find((country) => country.id === id);
 
   const countryError = !country;
   if (countryError) {
-    return <div>Country not found </div>;
+    return <div>Country not found</div>;
   }
 
   return (
@@ -18,8 +16,8 @@ const CountryDetailView: React.FC = () => {
       <p>{country.population}</p>
       <p>
         {lang === "ka"
-          ? `დედაქალაქი: ${country.capitalKA}`
-          : `Capital: ${country.capital}`}
+          ? `დედაქალაქი: ${country.capitalKa}` // Corrected to capitalKa
+          : `Capital: ${country.capitalEn}`} // Corrected to capitalEn
       </p>
     </div>
   );

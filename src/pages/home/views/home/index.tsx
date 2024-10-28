@@ -4,7 +4,7 @@ import { lazy } from "react";
 
 const LazyHero = lazy(() => import("@/pages/home/components/hero/Hero"));
 const LazyCountryCard = lazy(
-  () => import("@/pages/home/components/cards/country-card")
+  () => import("@/pages/home/components/cards/country-card"),
 );
 
 const Homeview = () => {
