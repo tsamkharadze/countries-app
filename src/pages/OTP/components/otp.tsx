@@ -1,49 +1,90 @@
-import { ChangeEvent, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  ClipboardEvent,
+  useRef,
+  useState,
+  KeyboardEvent,
+} from "react";
+import styles from "./otp.module.css";
 
-const Otp = () => {
-  const [inputs] = useState([
-    { value: "" },
-    { value: "" },
-    { value: "" },
-    { value: "" },
-  ]);
+const Otp = ({ numInputs }: { numInputs: number }) => {
+  // კომპონენტის viewში შეგვიძლია მივუთითოთ ინფუთის რაოდენობა,
+  // რომელიც გადაეცემა ჩაილდად numInputs-ის სახით
 
-  const inputRefs = useRef<any>({});
+  const [inputs, setInputs] = useState(Array(numInputs).fill(""));
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
-    const value = e.target.value;
+  const inputRefs = useRef<{ [key: number]: HTMLInputElement | null }>({});
 
-    if (value) {
-      console.log("Next");
-      inputRefs?.current[index + 1]?.focus();
-    }
-  };
+  const handleChange =
+    (index: number) => (e: ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+
+      if (value.length <= 1) {
+        const newInputs = [...inputs];
+        newInputs[index] = value;
+        setInputs(newInputs);
+
+        if (value && index < numInputs - 1) {
+          inputRefs.current[index + 1]?.focus();
+        } else {
+          inputRefs.current[index]?.blur();
+        }
+      }
+    };
+
+  const handlePaste =
+    (index: number) => (e: ClipboardEvent<HTMLInputElement>) => {
+      const pasteData = e.clipboardData
+        .getData("text")
+        .slice(0, numInputs - index);
+      const newInputs = [...inputs];
+
+      pasteData.split("").forEach((char, i) => {
+        newInputs[index + i] = char;
+        if (inputRefs.current[index + i]) {
+          inputRefs.current[index + i]!.value = char;
+        }
+      });
+
+      setInputs(newInputs);
+      e.preventDefault();
+      inputRefs.current[index + pasteData.length - 1]?.focus();
+    };
+
+  const handleKeyDown =
+    (index: number) => (e: KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === "Backspace") {
+        if (inputs[index] === "" && index > 0) {
+          const newInputs = [...inputs];
+          newInputs[index - 1] = "";
+          setInputs(newInputs);
+          inputRefs.current[index - 1]?.focus();
+        } else {
+          const newInputs = [...inputs];
+          newInputs[index] = "";
+          setInputs(newInputs);
+        }
+      }
+    };
 
   return (
-    <div
-      style={{
-        padding: 100,
-        display: "flex",
-        gap: 8,
-      }}
-    >
-      {inputs.map((input, index) => {
-        return (
-          <input
-            ref={(element) => {
-              if (index === 0) {
-                element?.focus();
-              }
-              inputRefs.current[index] = element;
-            }}
-            key={index}
-            onChange={(e) => handleChange(e, index)}
-            style={{ width: 60 }}
-            type="number"
-            maxLength={1}
-          />
-        );
-      })}
+    <div className={styles.container}>
+      {inputs.map((input, index) => (
+        <input
+          ref={(element) => {
+            inputRefs.current[index] = element;
+          }}
+          key={index}
+          value={input}
+          onChange={handleChange(index)}
+          onPaste={handlePaste(index)}
+          onKeyDown={handleKeyDown(index)}
+          className={styles.input}
+          type="text"
+          maxLength={1}
+          placeholder="●"
+        />
+      ))}
     </div>
   );
 };

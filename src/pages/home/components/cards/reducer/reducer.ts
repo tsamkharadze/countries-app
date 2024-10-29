@@ -68,19 +68,19 @@ type countriesReducerInitialState = Country[];
 
 export const countriesReducer = (
   countriesList: countriesReducerInitialState,
-  action: countriesReducerAction
+  action: countriesReducerAction,
 ): countriesReducerInitialState => {
   switch (action.type) {
     case "like":
       return countriesList.map((country) =>
         country.id === action.payload.id
           ? { ...country, like: country.like + 1 }
-          : country
+          : country,
       );
 
     case "sort":
       return [...countriesList].sort((a, b) =>
-        action.payload.sortType === "asc" ? a.like - b.like : b.like - a.like
+        action.payload.sortType === "asc" ? a.like - b.like : b.like - a.like,
       );
 
     case "create":
@@ -99,14 +99,14 @@ export const countriesReducer = (
       return countriesList.map((country) =>
         country.id === action.payload.id
           ? { ...country, deleted: true }
-          : country
+          : country,
       );
 
     case "restore":
       return countriesList.map((country) =>
         country.id === action.payload.id && country.deleted
           ? { ...country, deleted: false }
-          : country
+          : country,
       );
 
     default:

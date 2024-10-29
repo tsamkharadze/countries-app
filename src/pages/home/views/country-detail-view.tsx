@@ -17,7 +17,8 @@ const CountryDetailView: React.FC = () => {
       <p>
         {lang === "ka"
           ? `დედაქალაქი: ${country.capitalKa}` // Corrected to capitalKa
-          : `Capital: ${country.capitalEn}`} // Corrected to capitalEn
+          : `Capital: ${country.capitalEn}`}{" "}
+        // Corrected to capitalEn
       </p>
     </div>
   );

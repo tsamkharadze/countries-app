@@ -1,10 +1,11 @@
-import Otp from '../components/otp'
+import Otp from "../components/otp";
 
 const OtpView = () => {
   return (
     <>
-    <Otp/></>
-  )
-}
+      <Otp numInputs={4} />
+    </>
+  );
+};
 
-export default OtpView
+export default OtpView;

@@ -29,7 +29,7 @@ const CountryCard: React.FC = () => {
 
   const [countriesList, dispatch] = useReducer(
     countriesReducer,
-    countriesInitialState
+    countriesInitialState,
   );
 
   const handleLikeUp = (id: string) => () => {
@@ -87,9 +87,7 @@ const CountryCard: React.FC = () => {
               />
               <CardContent
                 population={country.population}
-                capital={
-                  lang === "ka" ? country.capitalKa : country.capitalEn
-                }
+                capital={lang === "ka" ? country.capitalKa : country.capitalEn}
               />
               <CardFooter
                 onDeleteCountry={() => handleDeleteCountry(country.id)}
