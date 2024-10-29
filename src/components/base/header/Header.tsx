@@ -16,6 +16,7 @@ const translations = {
     explore: "გაეცანი",
     continents: "კონტინენტები",
     contact: "კონტაქტი",
+    otp:"OTP",
     about: "ჩვენს შესახებ",
   },
   en: {
@@ -23,6 +24,7 @@ const translations = {
     explore: "Explore Countries",
     continents: "Continents",
     contact: "Contact",
+    otp:"OTP",
     about: "About Us",
   },
 };
@@ -53,6 +55,9 @@ const Header: React.FC<HeaderProps> = ({ lang, onLanguageChange }) => {
         </NavLink>
         <NavLink className={handleActiveNav} to={`/${lang}/contact`}>
           <p>{translations[lang].contact}</p>
+        </NavLink>
+        <NavLink className={handleActiveNav} to={`/${lang}/OTP`}>
+          <p>{translations[lang].otp}</p>
         </NavLink>
         <NavLink className={handleActiveNav} to={`/${lang}/about`}>
           <p>{translations[lang].about}</p>
