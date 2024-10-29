@@ -80,7 +80,7 @@ const Otp = ({ numInputs }: { numInputs: number }) => {
           onPaste={handlePaste(index)}
           onKeyDown={handleKeyDown(index)}
           className={styles.input}
-          type="text"
+          type="number"
           maxLength={1}
           placeholder="●"
         />
