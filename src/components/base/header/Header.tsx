@@ -16,7 +16,7 @@ const translations = {
     explore: "გაეცანი",
     continents: "კონტინენტები",
     contact: "კონტაქტი",
-    otp:"OTP",
+    otp: "OTP",
     about: "ჩვენს შესახებ",
   },
   en: {
@@ -24,7 +24,7 @@ const translations = {
     explore: "Explore Countries",
     continents: "Continents",
     contact: "Contact",
-    otp:"OTP",
+    otp: "OTP",
     about: "About Us",
   },
 };

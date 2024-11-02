@@ -25,7 +25,7 @@ function App() {
           <Route path="explore" element={<ExploreCountriesView />} />
           <Route path="continents" element={<Continents />} />
           <Route path="contact" element={<ContactView />} />
-          <Route path="OTP" element={<OtpView/>}/>
+          <Route path="OTP" element={<OtpView />} />
           <Route path="about" element={<AboutVieW />} />
           <Route path="countries/:id" element={<CountryDetailView />} />
         </Route>
