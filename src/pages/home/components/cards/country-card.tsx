@@ -4,33 +4,52 @@ import CardHeader from "./card-header/CardHeader";
 import CardContent from "./card-content/CardContent";
 import CardFooter from "./card-footer/CardFooter";
 import Card from "./card/card";
-import { useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import AddCountryForm from "./add-country-form/add-country";
-import countriesInitialState from "./reducer/state";
 import { countriesReducer } from "./reducer/reducer";
 import { useParams } from "react-router-dom";
+import axios from "axios";
+import ConfirmationModal from "./delete-Confirm/ConfirmationModal";
 
-// Define Country type
-interface Country {
+type CountryFields = {
+  id: string;
   imageSrc: string;
   nameKa: string;
   nameEn: string;
-  population: number; // Ensure this is a number
   capitalKa: string;
-  capitalEn: string; // Ensure this is included
+  capitalEn: string;
+  population: number;
+};
+
+interface Country {
   id: string;
+  imageSrc: string;
+  nameKa: string;
+  nameEn: string;
+  capitalKa: string;
+  capitalEn: string;
+  population: number;
   like: number;
-  deleted: boolean; // Ensure this is present and not optional
-  initialIndex?: number; // Optional if it is not always present
+  deleted: boolean;
 }
 
 const CountryCard: React.FC = () => {
+  const [countriesData, setCountriesData] = useState<Country[]>([]);
   const { lang } = useParams<{ lang: "ka" | "en" }>();
+  const [countriesList, dispatch] = useReducer(countriesReducer, countriesData);
 
-  const [countriesList, dispatch] = useReducer(
-    countriesReducer,
-    countriesInitialState,
+  // State to control the modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [countryIdToDelete, setCountryIdToDelete] = useState<string | null>(
+    null,
   );
+
+  useEffect(() => {
+    axios.get("http://localhost:3000/countries/").then((response) => {
+      setCountriesData(response.data);
+      dispatch({ type: "initialize", payload: { countries: response.data } });
+    });
+  }, []);
 
   const handleLikeUp = (id: string) => () => {
     dispatch({ type: "like", payload: { id } });
@@ -40,34 +59,61 @@ const CountryCard: React.FC = () => {
     dispatch({ type: "sort", payload: { sortType } });
   };
 
-  const handleCreateCountry = (countryFields: {
-    nameKa: string;
-    capitalKa: string;
-    population: number; // Ensure this is a number
-    imageSrc: string;
-    nameEn: string; // Added for complete structure
-    capitalEn: string; // Added for complete structure
-  }) => {
-    console.log(countryFields);
-    dispatch({ type: "create", payload: { countryFields } });
+  const handleCreateCountry = (countryFields: CountryFields) => {
+    axios
+      .post("http://localhost:3000/countries", {
+        ...countryFields,
+        like: 0,
+        deleted: false,
+      })
+      .then((response) => {
+        dispatch({ type: "create", payload: { countryFields: response.data } });
+      })
+      .catch((error) => {
+        console.error("Error creating country:", error);
+      });
   };
 
-  const handleDeleteCountry = (id: string) => {
-    dispatch({ type: "delete", payload: { id } });
+  const handleDeleteCountry = (countryId: string) => {
+    setCountryIdToDelete(countryId);
+    setIsModalOpen(true);
   };
 
-  const handleRestoreCountry = (id: string) => {
-    dispatch({ type: "restore", payload: { id } });
+  const confirmDelete = () => {
+    if (countryIdToDelete) {
+      dispatch({ type: "delete", payload: { id: countryIdToDelete } });
+
+      axios
+        .delete(`http://localhost:3000/countries/${countryIdToDelete}`)
+        .then((response) => {
+          console.log("Country deleted successfully:", response.data);
+        })
+        .catch((error) => {
+          console.error("There was an error deleting the country:", error);
+        });
+
+      setIsModalOpen(false);
+      setCountryIdToDelete(null);
+    }
   };
 
-  console.log(countriesList);
+  const cancelDelete = () => {
+    setIsModalOpen(false);
+    setCountryIdToDelete(null);
+  };
+
+  // Define confirmation message based on language
+  const confirmationMessage =
+    lang === "ka"
+      ? "დარწმუნებული ხართ, რომ გსურთ ქვეყნის წაშლა?"
+      : "Are you sure you want to delete this country?";
 
   return (
     <div>
       <div className={styles.manageCards}>
         <div className={styles.sortButton}>
-          <button onClick={handleSortByLikes("asc")}>⬆️</button>
-          <button onClick={handleSortByLikes("desc")}>⬇️</button>
+          <button onClick={handleSortByLikes("asc")}>⬆️ Sort Asc</button>
+          <button onClick={handleSortByLikes("desc")}>⬇️ Sort Desc</button>
         </div>
         <AddCountryForm onCreateCountry={handleCreateCountry} />
       </div>
@@ -91,13 +137,18 @@ const CountryCard: React.FC = () => {
               />
               <CardFooter
                 onDeleteCountry={() => handleDeleteCountry(country.id)}
-                onRestoreCountry={() => handleRestoreCountry(country.id)}
-                isDeleted={country.deleted} // Ensure this is always a boolean
               />
             </div>
           </Card>
         ))}
       </div>
+
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        onClose={cancelDelete}
+        onConfirm={confirmDelete}
+        message={confirmationMessage} // Pass the appropriate message
+      />
     </div>
   );
 };

@@ -3,6 +3,7 @@ import styles from "./add-country-form.module.css";
 
 type AddCountryFormProps = {
   onCreateCountry: (countryFields: {
+    id: string;
     nameKa: string;
     nameEn: string;
     capitalKa: string;
@@ -26,7 +27,7 @@ const AddCountryForm: React.FC<AddCountryFormProps> = ({ onCreateCountry }) => {
   const [nameEn, setNameEn] = useState("");
   const [capitalKa, setCapitalKa] = useState("");
   const [capitalEn, setCapitalEn] = useState("");
-  const [population, setPopulation] = useState<number>(0); // Set initial value to a number
+  const [population, setPopulation] = useState<number>(0);
   const [inputLang, setInputLang] = useState("ka");
 
   const [capitalFieldErrorMsg, setCapitalFieldErrorMsg] = useState("");
@@ -67,6 +68,7 @@ const AddCountryForm: React.FC<AddCountryFormProps> = ({ onCreateCountry }) => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onCreateCountry({
+      id: `country-${Date.now()}-${Math.random()}`, // Generate a unique ID
       nameKa,
       nameEn,
       capitalKa,

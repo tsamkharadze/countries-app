@@ -1,4 +1,5 @@
 type CountryFields = {
+  id: string;
   imageSrc: string;
   nameKa: string;
   nameEn: string;
@@ -42,6 +43,12 @@ type RestoreAction = {
     id: string;
   };
 };
+type InitializeAction = {
+  type: "initialize";
+  payload: {
+    countries: Country[];
+  };
+};
 
 // Combine all action types into a union type
 type countriesReducerAction =
@@ -49,7 +56,8 @@ type countriesReducerAction =
   | SortAction
   | CreateAction
   | DeleteAction
-  | RestoreAction;
+  | RestoreAction
+  | InitializeAction;
 
 type Country = {
   imageSrc: string;
@@ -70,14 +78,18 @@ export const countriesReducer = (
   countriesList: countriesReducerInitialState,
   action: countriesReducerAction,
 ): countriesReducerInitialState => {
+  console.log(countriesList);
+
   switch (action.type) {
+    case "initialize":
+      return action.payload.countries;
+
     case "like":
       return countriesList.map((country) =>
         country.id === action.payload.id
           ? { ...country, like: country.like + 1 }
           : country,
       );
-
     case "sort":
       return [...countriesList].sort((a, b) =>
         action.payload.sortType === "asc" ? a.like - b.like : b.like - a.like,
@@ -89,27 +101,18 @@ export const countriesReducer = (
         {
           ...action.payload.countryFields,
           like: 0,
-          id: `country-${Date.now()}-${Math.random()}`,
+          id: action.payload.countryFields.id,
           deleted: false, // Ensure deleted is set to false when creating
           initialIndex: countriesList.length, // Adjust as necessary
         },
       ];
-
     case "delete":
-      return countriesList.map((country) =>
-        country.id === action.payload.id
-          ? { ...country, deleted: true }
-          : country,
-      );
-
-    case "restore":
-      return countriesList.map((country) =>
-        country.id === action.payload.id && country.deleted
-          ? { ...country, deleted: false }
-          : country,
+      return countriesList.filter(
+        (country) => country.id !== action.payload.id,
       );
 
     default:
       return countriesList;
   }
+  console.log(countriesList);
 };
