@@ -1,5 +1,4 @@
 import { FormEvent, useEffect, useState } from "react";
-import axios from "axios"; // Import Axios
 import styles from "./edit-card.module.css";
 
 interface Country {
@@ -16,10 +15,11 @@ interface Country {
 
 interface CardEditProps {
   country: Country | undefined;
-  onUpdate?: (updatedCountry: Country) => void; // Callback for updating the country in the parent component
+  onUpdateCountry: (countryFields: Country) => void;
+  onClose: () => void;
 }
 
-const CardEdit: React.FC<CardEditProps> = ({ country, onUpdate }) => {
+const CardEdit: React.FC<CardEditProps> = ({ country, onUpdateCountry }) => {
   const [inputLang, setInputLang] = useState<"ka" | "en">("ka");
   const [editNameKa, setEditNameKa] = useState<string>("");
   const [editNameEn, setEditNameEn] = useState<string>("");
@@ -92,7 +92,7 @@ const CardEdit: React.FC<CardEditProps> = ({ country, onUpdate }) => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const updatedCountry: Country = {
+    onUpdateCountry({
       id: country?.id as string,
       nameKa: editNameKa,
       nameEn: editNameEn,
@@ -102,31 +102,7 @@ const CardEdit: React.FC<CardEditProps> = ({ country, onUpdate }) => {
       imageSrc: editImageSrc,
       like: country?.like || 0,
       deleted: country?.deleted || false,
-    };
-
-    // Using Axios to send a PUT request without try-catch
-    axios
-      .put(`http://localhost:3000/countries/${country?.id}`, updatedCountry)
-      .then((response) => {
-        console.log("Country updated successfully:", response.data);
-
-        // Clear fields after successful update
-        setEditNameKa("");
-        setEditNameEn("");
-        setEditCapitalKa("");
-        setEditCapitalEn("");
-        setEditPopulation(0);
-        setEditImageSrc("");
-
-        // Optionally notify parent component of the updated country
-        if (onUpdate) {
-          onUpdate(updatedCountry);
-        }
-      })
-      .catch((error) => {
-        console.error("Error updating country:", error);
-        // Handle the error, e.g., display an error message to the user
-      });
+    });
   };
 
   return (

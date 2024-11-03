@@ -45,7 +45,7 @@ const CountryCard: React.FC = () => {
     null,
   );
   const [countryIdToEdit, setCountryIdToEdit] = useState<string | null>(null);
-  // const [countryEditData, setCountryEditData]=useState({})
+  const [isEditing, setIsEditing] = useState(false); // New state for managing edit/add mode
 
   useEffect(() => {
     axios.get("http://localhost:3000/countries/").then((response) => {
@@ -71,9 +71,25 @@ const CountryCard: React.FC = () => {
       })
       .then((response) => {
         dispatch({ type: "create", payload: { countryFields: response.data } });
+        // Reset the editing state when a new country is added
+        setIsEditing(false);
+        setCountryIdToEdit(null); // Reset the edit ID
       })
       .catch((error) => {
         console.error("Error creating country:", error);
+      });
+  };
+
+  const handleEditCountry = (countryFields: CountryFields) => {
+    axios
+      .put(`http://localhost:3000/countries/${countryFields.id}`, {
+        ...countryFields,
+      })
+      .then((response) => {
+        dispatch({ type: "edit", payload: { countryFields: response.data } });
+        // Reset the editing state after edit confirmation
+        setIsEditing(false);
+        setCountryIdToEdit(null); // Reset the edit ID
       });
   };
 
@@ -81,14 +97,11 @@ const CountryCard: React.FC = () => {
     setCountryIdToDelete(countryId);
     setIsModalOpen(true);
   };
-  const handleEditCountry = (countryId: string) => {
-    setCountryIdToEdit(countryId);
-  };
 
-  const editTargetCountry = countriesData.find((c) => {
-    const country = c.id === countryIdToEdit;
-    return country;
-  });
+  const getEditCountry = (countryId: string) => {
+    setCountryIdToEdit(countryId);
+    setIsEditing(true); // Set editing mode when clicking edit
+  };
 
   const confirmDelete = () => {
     if (countryIdToDelete) {
@@ -96,15 +109,13 @@ const CountryCard: React.FC = () => {
 
       axios
         .delete(`http://localhost:3000/countries/${countryIdToDelete}`)
-        .then((response) => {
-          console.log("Country deleted successfully:", response.data);
+        .then(() => {
+          setIsModalOpen(false);
+          setCountryIdToDelete(null);
         })
         .catch((error) => {
           console.error("There was an error deleting the country:", error);
         });
-
-      setIsModalOpen(false);
-      setCountryIdToDelete(null);
     }
   };
 
@@ -116,8 +127,12 @@ const CountryCard: React.FC = () => {
   // Define confirmation message based on language
   const confirmationMessage =
     lang === "ka"
-      ? "დარწმუნებული ხართ, რომ გსურთ ქვეყნის წაშლა?"
+      ? "დარწმუნებული ხართ, რომ გსურთ country's წაშლა?"
       : "Are you sure you want to delete this country?";
+
+  const editTargetCountry = countriesData.find(
+    (country) => country.id === countryIdToEdit,
+  );
 
   return (
     <div>
@@ -126,8 +141,13 @@ const CountryCard: React.FC = () => {
           <button onClick={handleSortByLikes("asc")}>⬆️ Sort Asc</button>
           <button onClick={handleSortByLikes("desc")}>⬇️ Sort Desc</button>
         </div>
-        <AddCountryForm onCreateCountry={handleCreateCountry} />
-        <CardEdit country={editTargetCountry} />
+        <AddCountryForm
+          onCreateCountry={handleCreateCountry}
+          onAdd={() => {
+            setIsEditing(false); // Ensure edit state is reset when adding
+            setCountryIdToEdit(null); // Reset the edit ID
+          }}
+        />
       </div>
 
       <div className={styles.cardContainer}>
@@ -149,18 +169,29 @@ const CountryCard: React.FC = () => {
               />
               <CardFooter
                 onDeleteCountry={() => handleDeleteCountry(country.id)}
-                onEditCountry={() => handleEditCountry(country.id)}
+                onEditCountry={() => getEditCountry(country.id)}
               />
             </div>
           </Card>
         ))}
       </div>
 
+      {isEditing && countryIdToEdit && editTargetCountry && (
+        <CardEdit
+          country={editTargetCountry}
+          onUpdateCountry={handleEditCountry}
+          onClose={() => {
+            setIsEditing(false);
+            setCountryIdToEdit(null); // Reset the edit ID when closing
+          }} // Close edit when done
+        />
+      )}
+
       <ConfirmationModal
         isOpen={isModalOpen}
         onClose={cancelDelete}
         onConfirm={confirmDelete}
-        message={confirmationMessage} // Pass the appropriate message
+        message={confirmationMessage}
       />
     </div>
   );

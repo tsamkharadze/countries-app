@@ -11,6 +11,7 @@ type AddCountryFormProps = {
     population: number; // Ensure this is a number
     imageSrc: string;
   }) => void;
+  onAdd: () => void; // Add this line
 };
 
 const translations = {
@@ -22,7 +23,10 @@ const translations = {
   en: { name: "Name", capital: "Capital", population: "Population" },
 };
 
-const AddCountryForm: React.FC<AddCountryFormProps> = ({ onCreateCountry }) => {
+const AddCountryForm: React.FC<AddCountryFormProps> = ({
+  onCreateCountry,
+  onAdd,
+}) => {
   const [nameKa, setNameKa] = useState("");
   const [nameEn, setNameEn] = useState("");
   const [capitalKa, setCapitalKa] = useState("");
@@ -77,6 +81,7 @@ const AddCountryForm: React.FC<AddCountryFormProps> = ({ onCreateCountry }) => {
       population,
       imageSrc,
     });
+    onAdd(); // Call onAdd after creating the country
   };
 
   const handleToggleLanguage = (lang: "ka" | "en") => {

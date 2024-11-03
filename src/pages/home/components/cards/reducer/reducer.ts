@@ -29,6 +29,10 @@ type CreateAction = {
     countryFields: CountryFields;
   };
 };
+type EditAction = {
+  type: "edit";
+  payload: { countryFields: CountryFields };
+};
 
 type DeleteAction = {
   type: "delete";
@@ -55,6 +59,7 @@ type countriesReducerAction =
   | LikeAction
   | SortAction
   | CreateAction
+  | EditAction
   | DeleteAction
   | RestoreAction
   | InitializeAction;
@@ -93,6 +98,16 @@ export const countriesReducer = (
     case "sort":
       return [...countriesList].sort((a, b) =>
         action.payload.sortType === "asc" ? a.like - b.like : b.like - a.like,
+      );
+
+    case "edit":
+      return countriesList.map((country) =>
+        country.id === action.payload.countryFields.id
+          ? {
+              ...country,
+              ...action.payload.countryFields,
+            }
+          : country,
       );
 
     case "create":
