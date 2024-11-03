@@ -153,6 +153,17 @@ const CountryCard: React.FC = () => {
             setCountryIdToEdit(null); // Reset the edit ID
           }}
         />
+
+        {isEditing && countryIdToEdit && editTargetCountry && (
+          <CardEdit
+            country={editTargetCountry}
+            onUpdateCountry={handleEditCountry}
+            onClose={() => {
+              setIsEditing(false);
+              setCountryIdToEdit(null); // Reset the edit ID when closing
+            }} // Close edit when done
+          />
+        )}
       </div>
 
       <div className={styles.cardContainer}>
@@ -180,17 +191,6 @@ const CountryCard: React.FC = () => {
           </Card>
         ))}
       </div>
-
-      {isEditing && countryIdToEdit && editTargetCountry && (
-        <CardEdit
-          country={editTargetCountry}
-          onUpdateCountry={handleEditCountry}
-          onClose={() => {
-            setIsEditing(false);
-            setCountryIdToEdit(null); // Reset the edit ID when closing
-          }} // Close edit when done
-        />
-      )}
 
       <ConfirmationModal
         isOpen={isModalOpen}
