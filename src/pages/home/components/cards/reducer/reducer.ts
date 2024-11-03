@@ -83,8 +83,6 @@ export const countriesReducer = (
   countriesList: countriesReducerInitialState,
   action: countriesReducerAction,
 ): countriesReducerInitialState => {
-  console.log(countriesList);
-
   switch (action.type) {
     case "initialize":
       return action.payload.countries;
@@ -100,7 +98,22 @@ export const countriesReducer = (
         action.payload.sortType === "asc" ? a.like - b.like : b.like - a.like,
       );
 
-    case "edit":
+    case "create": {
+      const newCountriesList = [
+        ...countriesList,
+        {
+          ...action.payload.countryFields,
+          like: 0,
+          id: action.payload.countryFields.id,
+          deleted: false,
+          initialIndex: countriesList.length,
+        },
+      ];
+      console.log(newCountriesList); // Log new state after creation
+      return newCountriesList;
+    }
+
+    case "edit": {
       return countriesList.map((country) =>
         country.id === action.payload.countryFields.id
           ? {
@@ -109,18 +122,7 @@ export const countriesReducer = (
             }
           : country,
       );
-
-    case "create":
-      return [
-        ...countriesList,
-        {
-          ...action.payload.countryFields,
-          like: 0,
-          id: action.payload.countryFields.id,
-          deleted: false, // Ensure deleted is set to false when creating
-          initialIndex: countriesList.length, // Adjust as necessary
-        },
-      ];
+    }
     case "delete":
       return countriesList.filter(
         (country) => country.id !== action.payload.id,
@@ -129,5 +131,4 @@ export const countriesReducer = (
     default:
       return countriesList;
   }
-  console.log(countriesList);
 };

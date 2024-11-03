@@ -71,6 +71,7 @@ const CountryCard: React.FC = () => {
       })
       .then((response) => {
         dispatch({ type: "create", payload: { countryFields: response.data } });
+        console.log(countriesList);
         // Reset the editing state when a new country is added
         setIsEditing(false);
         setCountryIdToEdit(null); // Reset the edit ID
@@ -79,6 +80,10 @@ const CountryCard: React.FC = () => {
         console.error("Error creating country:", error);
       });
   };
+
+  useEffect(() => {
+    setCountriesData(countriesList);
+  }, [countriesList]);
 
   const handleEditCountry = (countryFields: CountryFields) => {
     axios
