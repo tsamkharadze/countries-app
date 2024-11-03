@@ -10,6 +10,7 @@ import { countriesReducer } from "./reducer/reducer";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import ConfirmationModal from "./delete-Confirm/ConfirmationModal";
+import CardEdit from "./edit-card-form/edit-card";
 
 type CountryFields = {
   id: string;
@@ -43,6 +44,8 @@ const CountryCard: React.FC = () => {
   const [countryIdToDelete, setCountryIdToDelete] = useState<string | null>(
     null,
   );
+  const [countryIdToEdit, setCountryIdToEdit] = useState<string | null>(null);
+  // const [countryEditData, setCountryEditData]=useState({})
 
   useEffect(() => {
     axios.get("http://localhost:3000/countries/").then((response) => {
@@ -78,6 +81,14 @@ const CountryCard: React.FC = () => {
     setCountryIdToDelete(countryId);
     setIsModalOpen(true);
   };
+  const handleEditCountry = (countryId: string) => {
+    setCountryIdToEdit(countryId);
+  };
+
+  const editTargetCountry = countriesData.find((c) => {
+    const country = c.id === countryIdToEdit;
+    return country;
+  });
 
   const confirmDelete = () => {
     if (countryIdToDelete) {
@@ -116,6 +127,7 @@ const CountryCard: React.FC = () => {
           <button onClick={handleSortByLikes("desc")}>⬇️ Sort Desc</button>
         </div>
         <AddCountryForm onCreateCountry={handleCreateCountry} />
+        <CardEdit country={editTargetCountry} />
       </div>
 
       <div className={styles.cardContainer}>
@@ -137,6 +149,7 @@ const CountryCard: React.FC = () => {
               />
               <CardFooter
                 onDeleteCountry={() => handleDeleteCountry(country.id)}
+                onEditCountry={() => handleEditCountry(country.id)}
               />
             </div>
           </Card>

@@ -9,7 +9,7 @@
       "capitalKa": "ტოკიო",
       "id": "1",
       "like": 0,
-      "deleted": false,
+      "isEditting": false,
       "initialIndex": 1
     },
     {
@@ -21,7 +21,7 @@
       "capitalKa": "ბერლინი",
       "id": "2",
       "like": 0,
-      "deleted": false,
+      "isEditting": false,
       "initialIndex": 2
     },
     {
@@ -33,7 +33,7 @@
       "capitalKa": "ოტავა",
       "id": "3",
       "like": 0,
-      "deleted": false,
+      "isEditting": false,
       "initialIndex": 3
     },
     {
@@ -45,7 +45,7 @@
       "capitalKa": "კანბერა",
       "id": "4",
       "like": 0,
-      "deleted": false,
+      "isEditting": false,
       "initialIndex": 4
     }
   ]

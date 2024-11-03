@@ -29,6 +29,7 @@ const AddCountryForm: React.FC<AddCountryFormProps> = ({ onCreateCountry }) => {
   const [capitalEn, setCapitalEn] = useState("");
   const [population, setPopulation] = useState<number>(0);
   const [inputLang, setInputLang] = useState("ka");
+  const [imageSrc, setImageSrc] = useState<string>("");
 
   const [capitalFieldErrorMsg, setCapitalFieldErrorMsg] = useState("");
   const [countryNameErrorMsg, setCountryNameErrorMsg] = useState("");
@@ -81,8 +82,6 @@ const AddCountryForm: React.FC<AddCountryFormProps> = ({ onCreateCountry }) => {
   const handleToggleLanguage = (lang: "ka" | "en") => {
     setInputLang(lang);
   };
-
-  const [imageSrc, setImageSrc] = useState<string>("");
 
   const handleFileUpload = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
