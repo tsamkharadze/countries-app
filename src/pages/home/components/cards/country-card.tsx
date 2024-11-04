@@ -11,6 +11,8 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import ConfirmationModal from "./delete-Confirm/ConfirmationModal";
 import CardEdit from "./edit-card-form/edit-card";
+import { getCountriesData } from "@/api/countries";
+import { useQuery } from "@tanstack/react-query";
 
 type CountryFields = {
   id: string;
@@ -47,12 +49,24 @@ const CountryCard: React.FC = () => {
   const [countryIdToEdit, setCountryIdToEdit] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false); // New state for managing edit/add mode
 
+  const {
+    data: countries,
+    // isLoading: countriesIsLoading,
+    // isError: countriesError,
+    // refetch: refetchCountries,
+  } = useQuery({
+    queryKey: ["countries-data"],
+    queryFn: getCountriesData,
+  });
+
   useEffect(() => {
-    axios.get("http://localhost:3000/countries/").then((response) => {
-      setCountriesData(response.data);
-      dispatch({ type: "initialize", payload: { countries: response.data } });
-    });
-  }, []);
+    if (countries) {
+      dispatch({ type: "initialize", payload: { countries: countries } });
+    }
+  }, [countries]);
+
+  console.log("data", countries);
+  console.log(countriesData);
 
   const handleLikeUp = (id: string) => () => {
     dispatch({ type: "like", payload: { id } });
@@ -71,7 +85,7 @@ const CountryCard: React.FC = () => {
       })
       .then((response) => {
         dispatch({ type: "create", payload: { countryFields: response.data } });
-        console.log(countriesList);
+        // console.log(countriesList);
         // Reset the editing state when a new country is added
         setIsEditing(false);
         setCountryIdToEdit(null); // Reset the edit ID
@@ -84,6 +98,10 @@ const CountryCard: React.FC = () => {
   useEffect(() => {
     setCountriesData(countriesList);
   }, [countriesList]);
+
+  const editTargetCountry = countriesData.find(
+    (country) => country.id === countryIdToEdit,
+  );
 
   const handleEditCountry = (countryFields: CountryFields) => {
     axios
@@ -98,14 +116,14 @@ const CountryCard: React.FC = () => {
       });
   };
 
-  const handleDeleteCountry = (countryId: string) => {
-    setCountryIdToDelete(countryId);
-    setIsModalOpen(true);
-  };
-
   const getEditCountry = (countryId: string) => {
     setCountryIdToEdit(countryId);
     setIsEditing(true); // Set editing mode when clicking edit
+  };
+
+  const handleDeleteCountry = (countryId: string) => {
+    setCountryIdToDelete(countryId);
+    setIsModalOpen(true);
   };
 
   const confirmDelete = () => {
@@ -134,10 +152,6 @@ const CountryCard: React.FC = () => {
     lang === "ka"
       ? "დარწმუნებული ხართ, რომ გსურთ country's წაშლა?"
       : "Are you sure you want to delete this country?";
-
-  const editTargetCountry = countriesData.find(
-    (country) => country.id === countryIdToEdit,
-  );
 
   return (
     <div>
