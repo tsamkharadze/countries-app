@@ -8,11 +8,15 @@ import { useEffect, useReducer, useState } from "react";
 import AddCountryForm from "./add-country-form/add-country";
 import { countriesReducer } from "./reducer/reducer";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 import ConfirmationModal from "./delete-Confirm/ConfirmationModal";
 import CardEdit from "./edit-card-form/edit-card";
-import { getCountriesData } from "@/api/countries";
-import { useQuery } from "@tanstack/react-query";
+import {
+  createCountry,
+  deleteCountry,
+  getCountriesData,
+  updateCountry,
+} from "@/api/countries";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 type CountryFields = {
   id: string;
@@ -53,7 +57,7 @@ const CountryCard: React.FC = () => {
     data: countries,
     // isLoading: countriesIsLoading,
     // isError: countriesError,
-    // refetch: refetchCountries,
+    refetch: refetchCountries,
   } = useQuery({
     queryKey: ["countries-data"],
     queryFn: getCountriesData,
@@ -76,23 +80,25 @@ const CountryCard: React.FC = () => {
     dispatch({ type: "sort", payload: { sortType } });
   };
 
+  const { mutate: createNewCountry } = useMutation({
+    mutationFn: createCountry,
+  });
   const handleCreateCountry = (countryFields: CountryFields) => {
-    axios
-      .post("http://localhost:3000/countries", {
-        ...countryFields,
-        like: 0,
-        deleted: false,
-      })
-      .then((response) => {
-        dispatch({ type: "create", payload: { countryFields: response.data } });
-        // console.log(countriesList);
+    createNewCountry(countryFields, {
+      onSuccess: (data) => {
+        refetchCountries();
+        dispatch({
+          type: "create",
+          payload: { countryFields: data }, // Use data directly
+        });
         // Reset the editing state when a new country is added
         setIsEditing(false);
         setCountryIdToEdit(null); // Reset the edit ID
-      })
-      .catch((error) => {
+      },
+      onError: (error) => {
         console.error("Error creating country:", error);
-      });
+      },
+    });
   };
 
   useEffect(() => {
@@ -103,17 +109,24 @@ const CountryCard: React.FC = () => {
     (country) => country.id === countryIdToEdit,
   );
 
+  const { mutate: editCountry } = useMutation({ mutationFn: updateCountry });
   const handleEditCountry = (countryFields: CountryFields) => {
-    axios
-      .put(`http://localhost:3000/countries/${countryFields.id}`, {
-        ...countryFields,
-      })
-      .then((response) => {
-        dispatch({ type: "edit", payload: { countryFields: response.data } });
-        // Reset the editing state after edit confirmation
-        setIsEditing(false);
-        setCountryIdToEdit(null); // Reset the edit ID
-      });
+    console.log(countryFields);
+    editCountry(
+      { id: countryFields.id, payload: { ...countryFields } },
+      {
+        onSuccess: (response) => {
+          dispatch({ type: "edit", payload: { countryFields: response.data } });
+          // Reset the editing state after edit confirmation
+          setIsEditing(false);
+          setCountryIdToEdit(null); // Reset the edit ID
+        },
+        onError: (error) => {
+          console.error("Failed to edit country:", error);
+          // Handle error state if needed
+        },
+      },
+    );
   };
 
   const getEditCountry = (countryId: string) => {
@@ -125,20 +138,22 @@ const CountryCard: React.FC = () => {
     setCountryIdToDelete(countryId);
     setIsModalOpen(true);
   };
+  const { mutate: removeCountry } = useMutation({ mutationFn: deleteCountry });
 
   const confirmDelete = () => {
     if (countryIdToDelete) {
       dispatch({ type: "delete", payload: { id: countryIdToDelete } });
 
-      axios
-        .delete(`http://localhost:3000/countries/${countryIdToDelete}`)
-        .then(() => {
+      removeCountry(countryIdToDelete, {
+        onSuccess: () => {
+          refetchCountries();
           setIsModalOpen(false);
           setCountryIdToDelete(null);
-        })
-        .catch((error) => {
-          console.error("There was an error deleting the country:", error);
-        });
+        },
+        onError: (error) => {
+          console.error("Failed to delete country:", error);
+        },
+      });
     }
   };
 

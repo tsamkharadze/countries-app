@@ -1,16 +1,15 @@
 {
   "countries": [
     {
-      "imageSrc": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Flag_of_Japan.svg",
+      "id": "1",
       "nameKa": "იაპონია",
       "nameEn": "Japan",
-      "population": 125800000,
-      "capitalEn": "Tokyo",
       "capitalKa": "ტოკიო",
-      "id": "1",
+      "capitalEn": "Tokyo",
+      "population": 125800000,
+      "imageSrc": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Flag_of_Japan.svg",
       "like": 0,
-      "isEditting": false,
-      "initialIndex": 1
+      "deleted": false
     },
     {
       "imageSrc": "https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Germany.svg",

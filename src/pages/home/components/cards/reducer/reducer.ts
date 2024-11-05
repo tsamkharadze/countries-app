@@ -115,7 +115,7 @@ export const countriesReducer = (
 
     case "edit": {
       return countriesList.map((country) =>
-        country.id === action.payload.countryFields.id
+        country.id === action.payload.countryFields?.id
           ? {
               ...country,
               ...action.payload.countryFields,
