@@ -16,7 +16,7 @@ import {
   getCountriesData,
   updateCountry,
 } from "@/api/countries";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { Country } from "@/types";
 
 type CountryFields = Country;
@@ -51,6 +51,8 @@ const CountryCard: React.FC = () => {
     },
   });
 
+  const queryClient = useQueryClient();
+
   useEffect(() => {
     if (countries) {
       dispatch({ type: "initialize", payload: { countries: countries } });
@@ -68,16 +70,10 @@ const CountryCard: React.FC = () => {
     dispatch({ type: "sort", payload: { sortType } });
   };
 
-  const { mutateAsync: createNewCountry } = useMutation({
+  const { mutate: createNewCountry } = useMutation({
     mutationFn: createCountry,
-  });
-
-  const handleCreateCountry = async (countryFields: CountryFields) => {
-    try {
-      const data = await createNewCountry(countryFields);
-
-      await refetchCountries();
-
+    onSuccess: (data) => {
+      refetchCountries();
       dispatch({
         type: "create",
         payload: { countryFields: data },
@@ -85,9 +81,14 @@ const CountryCard: React.FC = () => {
 
       setIsEditing(false);
       setCountryIdToEdit(null);
-    } catch (error) {
+    },
+    onError: (error) => {
       console.error("Error creating country:", error);
-    }
+    },
+  });
+
+  const handleCreateCountry = async (countryFields: CountryFields) => {
+    await createNewCountry(countryFields);
   };
 
   useEffect(() => {
@@ -105,7 +106,7 @@ const CountryCard: React.FC = () => {
       {
         onSuccess: () => {
           // dispatch({ type: "edit", payload: { countryFields: response.data } });
-          refetchCountries();
+          queryClient.invalidateQueries();
           setIsEditing(false);
           setCountryIdToEdit(null);
         },
@@ -125,22 +126,22 @@ const CountryCard: React.FC = () => {
     setCountryIdToDelete(countryId);
     setIsModalOpen(true);
   };
-  const { mutate: removeCountry } = useMutation({ mutationFn: deleteCountry });
+  const { mutate: removeCountry } = useMutation({
+    mutationFn: deleteCountry,
+    onSuccess: () => {
+      dispatch({ type: "delete", payload: { id: countryIdToDelete } });
+      queryClient.invalidateQueries();
+      setIsModalOpen(false);
+      setCountryIdToDelete(null);
+    },
+    onError: (error) => {
+      console.error("Failed to delete country:", error);
+    },
+  });
 
-  const confirmDelete = async () => {
+  const confirmDelete = () => {
     if (countryIdToDelete) {
-      try {
-        dispatch({ type: "delete", payload: { id: countryIdToDelete } });
-
-        await removeCountry(countryIdToDelete);
-
-        await refetchCountries();
-
-        setIsModalOpen(false);
-        setCountryIdToDelete(null);
-      } catch (error) {
-        console.error("Failed to delete country:", error);
-      }
+      removeCountry(countryIdToDelete);
     }
   };
 

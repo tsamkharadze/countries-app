@@ -39,7 +39,7 @@ type EditAction = {
 type DeleteAction = {
   type: "delete";
   payload: {
-    id: string;
+    id: string | null;
   };
 };
 

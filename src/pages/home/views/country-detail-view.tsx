@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import { getCountriesData } from "@/api/countries";
 
 interface Country {
   id: string;
@@ -12,25 +12,27 @@ interface Country {
 }
 const CountryDetailView: React.FC = () => {
   const { id, lang } = useParams(); // Destructure lang from useParams
-  const [country, setCountry] = useState<Country>();
+  // const [country, setCountry] = useState<Country>();
   // const countryId = country.find((country) => country.id === id);
 
-  useEffect(
-    () => {
-      axios.get("http://localhost:3000/countries").then((response) => {
-        const countryId = response.data.find(
-          (country: Country) => country.id === id,
-        );
-        setCountry(countryId);
-      });
-    },
-    //eslint-disable-next-line
-    [],
-  );
+  const { data: country, error: detailViewError } = useQuery({
+    queryKey: ["countries-detail.view"],
+    queryFn: async () => {
+      const data = await getCountriesData();
 
-  const countryError = !country;
-  if (countryError) {
+      const detailCountry = data.find((country: Country) => country.id === id);
+      return detailCountry;
+      console.log(data);
+    },
+  });
+  console.log(country);
+
+  if (detailViewError) {
     return <div>Country not found</div>;
+  }
+
+  if (!country) {
+    return <div>Loading...</div>;
   }
 
   return (
