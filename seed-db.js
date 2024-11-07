@@ -19,7 +19,6 @@ const translateText = async (text, toLang) => {
   }
 };
 
-// Main function to seed the database
 const seedDatabase = async () => {
   try {
     const response = await axios.get(COUNTRIES_API_URL);
@@ -38,8 +37,8 @@ const seedDatabase = async () => {
           capitalKa,
           capitalEn: country.capital?.[0] || "",
           population: country.population,
-          like: 0, // Default value for likes
-          deleted: false, // Default value for deleted
+          like: 0,
+          deleted: false,
         };
       }),
     );
@@ -54,5 +53,4 @@ const seedDatabase = async () => {
   }
 };
 
-// Run the seed function
 seedDatabase();

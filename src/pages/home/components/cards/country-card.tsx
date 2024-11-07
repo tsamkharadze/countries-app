@@ -21,24 +21,11 @@ import { Country } from "@/types";
 
 type CountryFields = Country;
 
-// interface Country {
-//   id: string;
-//   imageSrc: string;
-//   nameKa: string;
-//   nameEn: string;
-//   capitalKa: string;
-//   capitalEn: string;
-//   population: number;
-//   like: number;
-//   deleted: boolean;
-// }
-
 const CountryCard: React.FC = () => {
   const [countriesData, setCountriesData] = useState<Country[]>([]);
   const { lang } = useParams<{ lang: "ka" | "en" }>();
   const [countriesList, dispatch] = useReducer(countriesReducer, countriesData);
 
-  // State to control the modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [countryIdToDelete, setCountryIdToDelete] = useState<string | null>(
     null,
@@ -53,7 +40,15 @@ const CountryCard: React.FC = () => {
     refetch: refetchCountries,
   } = useQuery({
     queryKey: ["countries-data"],
-    queryFn: getCountriesData,
+    queryFn: async () => {
+      try {
+        const data = await getCountriesData();
+        return data;
+      } catch (error) {
+        console.error("Failed to fetch countries data:", error);
+        throw error;
+      }
+    },
   });
 
   useEffect(() => {
@@ -73,25 +68,26 @@ const CountryCard: React.FC = () => {
     dispatch({ type: "sort", payload: { sortType } });
   };
 
-  const { mutate: createNewCountry } = useMutation({
+  const { mutateAsync: createNewCountry } = useMutation({
     mutationFn: createCountry,
   });
-  const handleCreateCountry = (countryFields: CountryFields) => {
-    createNewCountry(countryFields, {
-      onSuccess: (data) => {
-        refetchCountries();
-        dispatch({
-          type: "create",
-          payload: { countryFields: data }, // Use data directly
-        });
-        // Reset the editing state when a new country is added
-        setIsEditing(false);
-        setCountryIdToEdit(null); // Reset the edit ID
-      },
-      onError: (error) => {
-        console.error("Error creating country:", error);
-      },
-    });
+
+  const handleCreateCountry = async (countryFields: CountryFields) => {
+    try {
+      const data = await createNewCountry(countryFields);
+
+      await refetchCountries();
+
+      dispatch({
+        type: "create",
+        payload: { countryFields: data },
+      });
+
+      setIsEditing(false);
+      setCountryIdToEdit(null);
+    } catch (error) {
+      console.error("Error creating country:", error);
+    }
   };
 
   useEffect(() => {
@@ -104,7 +100,6 @@ const CountryCard: React.FC = () => {
 
   const { mutate: editCountry } = useMutation({ mutationFn: updateCountry });
   const handleEditCountry = (countryFields: CountryFields) => {
-    console.log(countryFields);
     editCountry(
       { id: countryFields.id, payload: { ...countryFields } },
       {
@@ -112,11 +107,10 @@ const CountryCard: React.FC = () => {
           // dispatch({ type: "edit", payload: { countryFields: response.data } });
           refetchCountries();
           setIsEditing(false);
-          setCountryIdToEdit(null); // Reset the edit ID
+          setCountryIdToEdit(null);
         },
         onError: (error) => {
           console.error("Failed to edit country:", error);
-          // Handle error state if needed
         },
       },
     );
@@ -124,7 +118,7 @@ const CountryCard: React.FC = () => {
 
   const getEditCountry = (countryId: string) => {
     setCountryIdToEdit(countryId);
-    setIsEditing(true); // Set editing mode when clicking edit
+    setIsEditing(true);
   };
 
   const handleDeleteCountry = (countryId: string) => {
@@ -133,20 +127,20 @@ const CountryCard: React.FC = () => {
   };
   const { mutate: removeCountry } = useMutation({ mutationFn: deleteCountry });
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (countryIdToDelete) {
-      dispatch({ type: "delete", payload: { id: countryIdToDelete } });
+      try {
+        dispatch({ type: "delete", payload: { id: countryIdToDelete } });
 
-      removeCountry(countryIdToDelete, {
-        onSuccess: () => {
-          refetchCountries();
-          setIsModalOpen(false);
-          setCountryIdToDelete(null);
-        },
-        onError: (error) => {
-          console.error("Failed to delete country:", error);
-        },
-      });
+        await removeCountry(countryIdToDelete);
+
+        await refetchCountries();
+
+        setIsModalOpen(false);
+        setCountryIdToDelete(null);
+      } catch (error) {
+        console.error("Failed to delete country:", error);
+      }
     }
   };
 
@@ -155,7 +149,6 @@ const CountryCard: React.FC = () => {
     setCountryIdToDelete(null);
   };
 
-  // Define confirmation message based on language
   const confirmationMessage =
     lang === "ka"
       ? "დარწმუნებული ხართ, რომ გსურთ country's წაშლა?"
@@ -171,8 +164,8 @@ const CountryCard: React.FC = () => {
         <AddCountryForm
           onCreateCountry={handleCreateCountry}
           onAdd={() => {
-            setIsEditing(false); // Ensure edit state is reset when adding
-            setCountryIdToEdit(null); // Reset the edit ID
+            setIsEditing(false);
+            setCountryIdToEdit(null);
           }}
         />
 
@@ -182,8 +175,8 @@ const CountryCard: React.FC = () => {
             onUpdateCountry={handleEditCountry}
             onClose={() => {
               setIsEditing(false);
-              setCountryIdToEdit(null); // Reset the edit ID when closing
-            }} // Close edit when done
+              setCountryIdToEdit(null);
+            }}
           />
         )}
       </div>
