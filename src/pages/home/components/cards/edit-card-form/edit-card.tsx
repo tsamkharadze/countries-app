@@ -1,17 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
 import styles from "./edit-card.module.css";
-
-interface Country {
-  id: string;
-  imageSrc: string;
-  nameKa: string;
-  nameEn: string;
-  capitalKa: string;
-  capitalEn: string;
-  population: number;
-  like: number;
-  deleted: boolean;
-}
+import { Country } from "@/types";
 
 interface CardEditProps {
   country: Country | undefined;

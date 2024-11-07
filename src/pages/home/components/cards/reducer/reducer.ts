@@ -1,3 +1,5 @@
+import { Country } from "@/types";
+
 type CountryFields = {
   id: string;
   imageSrc: string;
@@ -64,18 +66,18 @@ type countriesReducerAction =
   | RestoreAction
   | InitializeAction;
 
-type Country = {
-  imageSrc: string;
-  nameKa: string;
-  nameEn: string;
-  capitalKa: string;
-  capitalEn: string;
-  population: number;
-  id: string;
-  like: number;
-  deleted: boolean; // Ensure this is present and not optional
-  initialIndex?: number; // Optional if it is not always present
-};
+// type Country = {
+//   imageSrc: string;
+//   nameKa: string;
+//   nameEn: string;
+//   capitalKa: string;
+//   capitalEn: string;
+//   population: number;
+//   id: string;
+//   like: number;
+//   deleted: boolean; // Ensure this is present and not optional
+//   initialIndex?: number; // Optional if it is not always present
+// };
 
 type countriesReducerInitialState = Country[];
 

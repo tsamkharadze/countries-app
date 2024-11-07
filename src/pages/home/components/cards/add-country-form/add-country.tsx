@@ -10,6 +10,7 @@ type AddCountryFormProps = {
     capitalEn: string;
     population: number; // Ensure this is a number
     imageSrc: string;
+    like: number;
   }) => void;
   onAdd: () => void; // Add this line
 };
@@ -80,6 +81,7 @@ const AddCountryForm: React.FC<AddCountryFormProps> = ({
       capitalEn,
       population,
       imageSrc,
+      like: 0,
     });
     onAdd(); // Call onAdd after creating the country
   };

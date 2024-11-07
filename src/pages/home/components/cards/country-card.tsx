@@ -17,28 +17,21 @@ import {
   updateCountry,
 } from "@/api/countries";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { Country } from "@/types";
 
-type CountryFields = {
-  id: string;
-  imageSrc: string;
-  nameKa: string;
-  nameEn: string;
-  capitalKa: string;
-  capitalEn: string;
-  population: number;
-};
+type CountryFields = Country;
 
-interface Country {
-  id: string;
-  imageSrc: string;
-  nameKa: string;
-  nameEn: string;
-  capitalKa: string;
-  capitalEn: string;
-  population: number;
-  like: number;
-  deleted: boolean;
-}
+// interface Country {
+//   id: string;
+//   imageSrc: string;
+//   nameKa: string;
+//   nameEn: string;
+//   capitalKa: string;
+//   capitalEn: string;
+//   population: number;
+//   like: number;
+//   deleted: boolean;
+// }
 
 const CountryCard: React.FC = () => {
   const [countriesData, setCountriesData] = useState<Country[]>([]);
@@ -115,9 +108,9 @@ const CountryCard: React.FC = () => {
     editCountry(
       { id: countryFields.id, payload: { ...countryFields } },
       {
-        onSuccess: (response) => {
-          dispatch({ type: "edit", payload: { countryFields: response.data } });
-          // Reset the editing state after edit confirmation
+        onSuccess: () => {
+          // dispatch({ type: "edit", payload: { countryFields: response.data } });
+          refetchCountries();
           setIsEditing(false);
           setCountryIdToEdit(null); // Reset the edit ID
         },
