@@ -18,6 +18,8 @@ import {
 } from "@/api/countries";
 import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
 import { Country } from "@/types";
+import React from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
 
 type CountryFields = Country;
 
@@ -155,6 +157,15 @@ const CountryCard: React.FC = () => {
       ? "დარწმუნებული ხართ, რომ გსურთ country's წაშლა?"
       : "Are you sure you want to delete this country?";
 
+  const parentRef = React.useRef(null);
+
+  const rowVirtualizer = useVirtualizer({
+    count: countriesData.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 35,
+    overscan: 5,
+  });
+
   return (
     <div>
       <div className={styles.manageCards}>
@@ -182,30 +193,69 @@ const CountryCard: React.FC = () => {
         )}
       </div>
 
-      <div className={styles.cardContainer}>
-        {countriesList.map((country: Country) => (
-          <Card key={country.id} id={country.id} deleted={country.deleted}>
-            <CardImage
-              src={country.imageSrc}
-              alt={country.nameKa || country.nameEn}
-            />
-            <div className={styles.cardText}>
-              <CardHeader
-                onLike={handleLikeUp(country.id)}
-                likeCount={country.like}
-                name={lang === "ka" ? country.nameKa : country.nameEn}
-              />
-              <CardContent
-                population={country.population}
-                capital={lang === "ka" ? country.capitalKa : country.capitalEn}
-              />
-              <CardFooter
-                onDeleteCountry={() => handleDeleteCountry(country.id)}
-                onEditCountry={() => getEditCountry(country.id)}
-              />
+      <div
+        ref={parentRef}
+        className="List"
+        style={{
+          height: `400px`,
+          width: `100%`,
+          overflow: "auto",
+        }}
+      >
+        <div
+          style={{
+            height: `${rowVirtualizer.getTotalSize()}px`,
+            width: "100%",
+            position: "relative",
+          }}
+        >
+          {rowVirtualizer.getVirtualItems().map((virtualRow) => (
+            <div
+              key={virtualRow.index}
+              className={virtualRow.index % 2 ? "ListItemOdd" : "ListItemEven"}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: `${virtualRow.size}px`,
+                transform: `translateY(${virtualRow.start}px)`,
+              }}
+            >
+              <div className={styles.cardContainer}>
+                {countriesList.map((country: Country) => (
+                  <Card
+                    key={country.id}
+                    id={country.id}
+                    deleted={country.deleted}
+                  >
+                    <CardImage
+                      src={country.imageSrc}
+                      alt={country.nameKa || country.nameEn}
+                    />
+                    <div className={styles.cardText}>
+                      <CardHeader
+                        onLike={handleLikeUp(country.id)}
+                        likeCount={country.like}
+                        name={lang === "ka" ? country.nameKa : country.nameEn}
+                      />
+                      <CardContent
+                        population={country.population}
+                        capital={
+                          lang === "ka" ? country.capitalKa : country.capitalEn
+                        }
+                      />
+                      <CardFooter
+                        onDeleteCountry={() => handleDeleteCountry(country.id)}
+                        onEditCountry={() => getEditCountry(country.id)}
+                      />
+                    </div>
+                  </Card>
+                ))}
+              </div>{" "}
             </div>
-          </Card>
-        ))}
+          ))}
+        </div>
       </div>
 
       <ConfirmationModal

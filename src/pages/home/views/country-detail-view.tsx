@@ -26,6 +26,8 @@ const CountryDetailView: React.FC = () => {
   } = useQuery<Country>({
     queryKey: ["countries-detail-view", id],
     queryFn: () => getSingleCountryData(id as string),
+    gcTime: 1000 * 6,
+    staleTime: 1000 * 6,
   });
 
   if (detailViewError) {
