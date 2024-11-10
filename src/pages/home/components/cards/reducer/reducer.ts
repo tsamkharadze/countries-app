@@ -53,6 +53,7 @@ type InitializeAction = {
   type: "initialize";
   payload: {
     countries: Country[];
+    sort: string | null;
   };
 };
 
@@ -87,6 +88,12 @@ export const countriesReducer = (
 ): countriesReducerInitialState => {
   switch (action.type) {
     case "initialize":
+      if (action.payload.sort === "like") {
+        return [...action.payload.countries].sort((a, b) => a.like - b.like);
+      }
+      if (action.payload.sort === "-like") {
+        return [...action.payload.countries].sort((a, b) => b.like - a.like);
+      }
       return action.payload.countries;
 
     case "like":

@@ -36,16 +36,8 @@ const CountryCard: React.FC = () => {
   const [countryIdToEdit, setCountryIdToEdit] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false); // New state for managing edit/add mode
   const [searchParams, setSearchParams] = useSearchParams();
-  const [sortType, setSortType] = useState(
-    searchParams.get("_sort") || "likes",
-  );
-
-  const {
-    data: countries,
-    // isLoading: countriesIsLoading,
-    // isError: countriesError,
-    refetch: refetchCountries,
-  } = useQuery({
+  const [sortType, setSortType] = useState(searchParams.get("_sort"));
+  const { data: countries, refetch: refetchCountries } = useQuery({
     queryKey: ["countries-data"],
     queryFn: async () => {
       try {
@@ -57,14 +49,18 @@ const CountryCard: React.FC = () => {
       }
     },
   });
+  console.log(countries);
 
   const queryClient = useQueryClient();
 
   useEffect(() => {
     if (countries) {
-      dispatch({ type: "initialize", payload: { countries: countries } });
+      dispatch({
+        type: "initialize",
+        payload: { countries: countries, sort: sortType },
+      });
     }
-  }, [countries]);
+  }, [countries, sortType]);
 
   const { mutate: updateLikes } = useMutation({ mutationFn: updateCountry });
 
@@ -73,13 +69,11 @@ const CountryCard: React.FC = () => {
     updateLikes({ id, payload: { like: currentLikes + 1 } });
   };
 
-  console.log(sortType);
   const handleSortByLikes = async (sortType: "asc" | "desc") => {
     try {
       const newSort = sortType === "asc" ? "like" : "-like";
       setSortType(newSort);
       const sortedData = await getSortedCountriesData(newSort, sortType);
-      console.log(sortedData);
       dispatch({ type: "sort", payload: { sortedData } });
       setSearchParams({ _sort: newSort });
       refetchCountries(); // Refetch data based on the new sort type
@@ -88,7 +82,6 @@ const CountryCard: React.FC = () => {
     }
   };
 
-  console.log(searchParams.get("_sort"));
   const { mutate: createNewCountry } = useMutation({
     mutationFn: createCountry,
     onSuccess: (data) => {
@@ -124,7 +117,6 @@ const CountryCard: React.FC = () => {
       { id: countryFields.id, payload: { ...countryFields } },
       {
         onSuccess: () => {
-          // dispatch({ type: "edit", payload: { countryFields: response.data } });
           queryClient.invalidateQueries();
           setIsEditing(false);
           setCountryIdToEdit(null);
@@ -177,9 +169,9 @@ const CountryCard: React.FC = () => {
   const parentRef = React.useRef(null);
 
   const rowVirtualizer = useVirtualizer({
-    count: countriesData.length,
+    count: countriesList.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: () => 35,
+    estimateSize: () => 280,
     overscan: 5,
   });
 
@@ -214,73 +206,59 @@ const CountryCard: React.FC = () => {
         )}
       </div>
 
-      <div
-        ref={parentRef}
-        className="List"
-        style={{
-          height: `400px`,
-          width: `100%`,
-          overflow: "auto",
-        }}
-      >
+      <div>
         <div
+          className={styles.cardContainer}
+          ref={parentRef}
           style={{
-            height: `${rowVirtualizer.getTotalSize()}px`,
-            width: "100%",
+            height: `400px`,
+            overflow: "auto",
             position: "relative",
           }}
         >
           {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+            // Get the country corresponding to this virtual row index
+            const country = countriesList[virtualRow.index];
+
             return (
               <div
                 key={virtualRow.index}
-                className={
-                  virtualRow.index % 2 ? "ListItemOdd" : "ListItemEven"
-                }
                 style={{
                   position: "absolute",
-                  top: 0,
-                  left: 0,
+                  top: virtualRow.start,
+                  // left: "35%",
+                  // transform: "translateY(-50%)", // Correcting position
                   width: "100%",
                   height: `${virtualRow.size}px`,
-                  transform: `translateY(${virtualRow.start}px)`,
                 }}
               >
-                <div className={styles.cardContainer}>
-                  {countriesList.map((country: Country) => (
-                    <Card
-                      key={country.id}
-                      id={country.id}
-                      deleted={country.deleted}
-                    >
-                      <CardImage
-                        src={country.imageSrc}
-                        alt={country.nameKa || country.nameEn}
-                      />
-                      <div className={styles.cardText}>
-                        <CardHeader
-                          onLike={handleLikeUp(country.id, country.like)}
-                          likeCount={country.like}
-                          name={lang === "ka" ? country.nameKa : country.nameEn}
-                        />
-                        <CardContent
-                          population={country.population}
-                          capital={
-                            lang === "ka"
-                              ? country.capitalKa
-                              : country.capitalEn
-                          }
-                        />
-                        <CardFooter
-                          onDeleteCountry={() =>
-                            handleDeleteCountry(country.id)
-                          }
-                          onEditCountry={() => getEditCountry(country.id)}
-                        />
-                      </div>
-                    </Card>
-                  ))}
-                </div>{" "}
+                <Card
+                  key={country.id}
+                  id={country.id}
+                  deleted={country.deleted}
+                >
+                  <CardImage
+                    src={country.imageSrc}
+                    alt={country.nameKa || country.nameEn}
+                  />
+                  <div className={styles.cardText}>
+                    <CardHeader
+                      onLike={handleLikeUp(country.id, country.like)}
+                      likeCount={country.like}
+                      name={lang === "ka" ? country.nameKa : country.nameEn}
+                    />
+                    <CardContent
+                      population={country.population}
+                      capital={
+                        lang === "ka" ? country.capitalKa : country.capitalEn
+                      }
+                    />
+                    <CardFooter
+                      onDeleteCountry={() => handleDeleteCountry(country.id)}
+                      onEditCountry={() => getEditCountry(country.id)}
+                    />
+                  </div>
+                </Card>
               </div>
             );
           })}

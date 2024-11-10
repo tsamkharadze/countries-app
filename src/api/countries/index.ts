@@ -1,9 +1,23 @@
-import { Country } from "@/types";
+import { Country, CountryResponse } from "@/types";
 import { httpClient } from "..";
 
 export const getCountriesData = async (): Promise<Country[]> => {
   try {
-    const response = await httpClient.get<Country[]>("/countries");
+    const response = await httpClient.get<Country[]>(`/countries`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching countries data:", error);
+    throw new Error("Failed to fetch countries data.");
+  }
+};
+
+export const getFetchedCountriesData = async (
+  param: number,
+): Promise<CountryResponse> => {
+  try {
+    const response = await httpClient.get<CountryResponse>(
+      `/countries?_page=${param}&_per_page=4`,
+    );
     return response.data;
   } catch (error) {
     console.error("Error fetching countries data:", error);

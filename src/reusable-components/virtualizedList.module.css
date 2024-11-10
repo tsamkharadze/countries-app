@@ -1,0 +1,32 @@
+/* Styles for the virtualized list container */
+.List {
+  position: relative; /* Ensures child elements are positioned absolutely within the container */
+  height: 400px; /* Adjust this as needed */
+  width: 100%;
+  overflow-y: auto; /* Enable vertical scrolling when content exceeds the container's height */
+  background-color: #f9f9f9; /* Optional background color */
+  border: 1px solid #ddd; /* Optional border for the container */
+  padding: 0;
+}
+
+/* Styles for odd-indexed list items */
+.ListItemOdd {
+  background-color: #f1f1f1; /* Lighter background for odd items */
+  padding: 10px;
+  box-sizing: border-box; /* Ensures padding does not affect the size of the element */
+  border-bottom: 1px solid #e0e0e0; /* Optional border to separate items */
+}
+
+/* Styles for even-indexed list items */
+.ListItemEven {
+  background-color: #ffffff; /* Lighter background for even items */
+  padding: 10px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Optional: Hover effect for list items */
+.ListItemOdd:hover,
+.ListItemEven:hover {
+  background-color: #e0e0e0; /* Change background color when hovering over items */
+}
