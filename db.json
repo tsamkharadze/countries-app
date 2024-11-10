@@ -8,7 +8,7 @@
       "capitalEn": "Tokyo",
       "population": 125800000,
       "imageSrc": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Flag_of_Japan.svg",
-      "like": 0,
+      "like": 1,
       "deleted": false
     },
     {
@@ -19,7 +19,7 @@
       "capitalEn": "Berlin",
       "capitalKa": "ბერლინი",
       "id": "2",
-      "like": 0,
+      "like": 2,
       "isEditting": false,
       "initialIndex": 2
     },
@@ -46,6 +46,26 @@
       "like": 0,
       "isEditting": false,
       "initialIndex": 4
+    },
+    {
+      "id": "country-1731221713958-0.007583261091107962",
+      "nameKa": "",
+      "nameEn": "",
+      "capitalKa": "",
+      "capitalEn": "",
+      "population": 0,
+      "imageSrc": "",
+      "like": 0
+    },
+    {
+      "id": "country-1731221714785-0.1299806205841223",
+      "nameKa": "",
+      "nameEn": "",
+      "capitalKa": "",
+      "capitalEn": "",
+      "population": 0,
+      "imageSrc": "",
+      "like": 0
     }
   ]
 }

@@ -7,7 +7,7 @@ import Card from "./card/card";
 import { useEffect, useReducer, useState } from "react";
 import AddCountryForm from "./add-country-form/add-country";
 import { countriesReducer } from "./reducer/reducer";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import ConfirmationModal from "./delete-Confirm/ConfirmationModal";
 import CardEdit from "./edit-card-form/edit-card";
 import {
@@ -34,6 +34,10 @@ const CountryCard: React.FC = () => {
   );
   const [countryIdToEdit, setCountryIdToEdit] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false); // New state for managing edit/add mode
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [sortType, setSortType] = useState(
+    searchParams.get("_sort") || "likes",
+  );
 
   const {
     data: countries,
@@ -61,17 +65,22 @@ const CountryCard: React.FC = () => {
     }
   }, [countries]);
 
-  console.log("data", countries);
-  console.log(countriesData);
+  const { mutate: updateLikes } = useMutation({ mutationFn: updateCountry });
 
-  const handleLikeUp = (id: string) => () => {
+  const handleLikeUp = (id: string, currentLikes: number) => () => {
     dispatch({ type: "like", payload: { id } });
+    updateLikes({ id, payload: { like: currentLikes + 1 } });
   };
 
+  console.log(sortType);
   const handleSortByLikes = (sortType: "asc" | "desc") => () => {
+    const newSort = sortType === "asc" ? "likes" : "-likes";
+    setSortType(newSort);
     dispatch({ type: "sort", payload: { sortType } });
+    setSearchParams({ _sort: newSort });
+    refetchCountries(); // Refetch data based on the new sort type
   };
-
+  console.log(searchParams.get("_sort"));
   const { mutate: createNewCountry } = useMutation({
     mutationFn: createCountry,
     onSuccess: (data) => {
@@ -209,52 +218,60 @@ const CountryCard: React.FC = () => {
             position: "relative",
           }}
         >
-          {rowVirtualizer.getVirtualItems().map((virtualRow) => (
-            <div
-              key={virtualRow.index}
-              className={virtualRow.index % 2 ? "ListItemOdd" : "ListItemEven"}
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: `${virtualRow.size}px`,
-                transform: `translateY(${virtualRow.start}px)`,
-              }}
-            >
-              <div className={styles.cardContainer}>
-                {countriesList.map((country: Country) => (
-                  <Card
-                    key={country.id}
-                    id={country.id}
-                    deleted={country.deleted}
-                  >
-                    <CardImage
-                      src={country.imageSrc}
-                      alt={country.nameKa || country.nameEn}
-                    />
-                    <div className={styles.cardText}>
-                      <CardHeader
-                        onLike={handleLikeUp(country.id)}
-                        likeCount={country.like}
-                        name={lang === "ka" ? country.nameKa : country.nameEn}
+          {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+            return (
+              <div
+                key={virtualRow.index}
+                className={
+                  virtualRow.index % 2 ? "ListItemOdd" : "ListItemEven"
+                }
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: `${virtualRow.size}px`,
+                  transform: `translateY(${virtualRow.start}px)`,
+                }}
+              >
+                <div className={styles.cardContainer}>
+                  {countriesList.map((country: Country) => (
+                    <Card
+                      key={country.id}
+                      id={country.id}
+                      deleted={country.deleted}
+                    >
+                      <CardImage
+                        src={country.imageSrc}
+                        alt={country.nameKa || country.nameEn}
                       />
-                      <CardContent
-                        population={country.population}
-                        capital={
-                          lang === "ka" ? country.capitalKa : country.capitalEn
-                        }
-                      />
-                      <CardFooter
-                        onDeleteCountry={() => handleDeleteCountry(country.id)}
-                        onEditCountry={() => getEditCountry(country.id)}
-                      />
-                    </div>
-                  </Card>
-                ))}
-              </div>{" "}
-            </div>
-          ))}
+                      <div className={styles.cardText}>
+                        <CardHeader
+                          onLike={handleLikeUp(country.id, country.like)}
+                          likeCount={country.like}
+                          name={lang === "ka" ? country.nameKa : country.nameEn}
+                        />
+                        <CardContent
+                          population={country.population}
+                          capital={
+                            lang === "ka"
+                              ? country.capitalKa
+                              : country.capitalEn
+                          }
+                        />
+                        <CardFooter
+                          onDeleteCountry={() =>
+                            handleDeleteCountry(country.id)
+                          }
+                          onEditCountry={() => getEditCountry(country.id)}
+                        />
+                      </div>
+                    </Card>
+                  ))}
+                </div>{" "}
+              </div>
+            );
+          })}
         </div>
       </div>
 
