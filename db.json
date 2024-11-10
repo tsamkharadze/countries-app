@@ -46,26 +46,6 @@
       "like": 0,
       "isEditting": false,
       "initialIndex": 4
-    },
-    {
-      "id": "country-1731221713958-0.007583261091107962",
-      "nameKa": "",
-      "nameEn": "",
-      "capitalKa": "",
-      "capitalEn": "",
-      "population": 0,
-      "imageSrc": "",
-      "like": 0
-    },
-    {
-      "id": "country-1731221714785-0.1299806205841223",
-      "nameKa": "",
-      "nameEn": "",
-      "capitalKa": "",
-      "capitalEn": "",
-      "population": 0,
-      "imageSrc": "",
-      "like": 0
     }
   ]
 }

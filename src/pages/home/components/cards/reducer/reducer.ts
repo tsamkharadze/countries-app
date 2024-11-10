@@ -21,7 +21,7 @@ type LikeAction = {
 type SortAction = {
   type: "sort";
   payload: {
-    sortType: "asc" | "desc";
+    sortedData: Country[];
   };
 };
 
@@ -96,9 +96,7 @@ export const countriesReducer = (
           : country,
       );
     case "sort":
-      return [...countriesList].sort((a, b) =>
-        action.payload.sortType === "asc" ? a.like - b.like : b.like - a.like,
-      );
+      return [...action.payload.sortedData];
 
     case "create": {
       const newCountriesList = [

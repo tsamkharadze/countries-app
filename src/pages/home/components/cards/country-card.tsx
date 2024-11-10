@@ -14,6 +14,7 @@ import {
   createCountry,
   deleteCountry,
   getCountriesData,
+  getSortedCountriesData,
   updateCountry,
 } from "@/api/countries";
 import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
@@ -73,13 +74,20 @@ const CountryCard: React.FC = () => {
   };
 
   console.log(sortType);
-  const handleSortByLikes = (sortType: "asc" | "desc") => () => {
-    const newSort = sortType === "asc" ? "likes" : "-likes";
-    setSortType(newSort);
-    dispatch({ type: "sort", payload: { sortType } });
-    setSearchParams({ _sort: newSort });
-    refetchCountries(); // Refetch data based on the new sort type
+  const handleSortByLikes = async (sortType: "asc" | "desc") => {
+    try {
+      const newSort = sortType === "asc" ? "like" : "-like";
+      setSortType(newSort);
+      const sortedData = await getSortedCountriesData(newSort, sortType);
+      console.log(sortedData);
+      dispatch({ type: "sort", payload: { sortedData } });
+      setSearchParams({ _sort: newSort });
+      refetchCountries(); // Refetch data based on the new sort type
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   console.log(searchParams.get("_sort"));
   const { mutate: createNewCountry } = useMutation({
     mutationFn: createCountry,
@@ -179,8 +187,12 @@ const CountryCard: React.FC = () => {
     <div>
       <div className={styles.manageCards}>
         <div className={styles.sortButton}>
-          <button onClick={handleSortByLikes("asc")}>⬆️ Sort Asc</button>
-          <button onClick={handleSortByLikes("desc")}>⬇️ Sort Desc</button>
+          <button onClick={async () => handleSortByLikes("asc")}>
+            ⬆️ Sort Asc
+          </button>
+          <button onClick={async () => handleSortByLikes("desc")}>
+            ⬇️ Sort Desc
+          </button>
         </div>
         <AddCountryForm
           onCreateCountry={handleCreateCountry}

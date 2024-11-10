@@ -21,6 +21,21 @@ export const getSingleCountryData = async (id: string): Promise<Country> => {
   }
 };
 
+export const getSortedCountriesData = async (
+  name: string,
+  type: string,
+): Promise<Country[]> => {
+  try {
+    const response = await httpClient.get<Country[]>(
+      `/countries?_sort=${name}&order=${type}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching countries data:", error);
+    throw new Error("Failed to fetch countries data.");
+  }
+};
+
 export const updateCountry = async ({
   id,
   payload,
