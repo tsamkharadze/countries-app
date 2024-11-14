@@ -14,10 +14,16 @@ import {
   createCountry,
   deleteCountry,
   getCountriesData,
+  getFetchedCountriesData,
   getSortedCountriesData,
   updateCountry,
 } from "@/api/countries";
-import { useQueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import {
+  useQueryClient,
+  useMutation,
+  useQuery,
+  useInfiniteQuery,
+} from "@tanstack/react-query";
 import { Country } from "@/types";
 import React from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
@@ -57,7 +63,7 @@ const CountryCard: React.FC = () => {
     if (countries) {
       dispatch({
         type: "initialize",
-        payload: { countries: countries, sort: sortType },
+        payload: { countries, sort: sortType },
       });
     }
   }, [countries, sortType]);
@@ -166,14 +172,56 @@ const CountryCard: React.FC = () => {
       ? "დარწმუნებული ხართ, რომ გსურთ country's წაშლა?"
       : "Are you sure you want to delete this country?";
 
+  const {
+    status,
+    data,
+    error,
+    isFetching,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["articles"],
+    queryFn: ({ pageParam }) =>
+      getFetchedCountriesData({ page: pageParam, limit: 2 }),
+    getNextPageParam: (lastGroup) => lastGroup.nextOffset,
+    initialPageParam: 1,
+  });
+
+  const allRows = data ? data.pages.flatMap((d) => d.data) : [];
+  console.log(hasNextPage);
+
   const parentRef = React.useRef(null);
 
   const rowVirtualizer = useVirtualizer({
-    count: countriesList.length,
+    count: hasNextPage ? allRows.length + 1 : allRows.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => 280,
     overscan: 5,
   });
+
+  const virtualItems = rowVirtualizer.getVirtualItems();
+  React.useEffect(() => {
+    const [lastItem] = [...virtualItems].reverse();
+
+    if (!lastItem) {
+      return;
+    }
+
+    if (
+      lastItem.index >= allRows.length - 1 &&
+      hasNextPage &&
+      !isFetchingNextPage
+    ) {
+      fetchNextPage();
+    }
+  }, [
+    hasNextPage,
+    fetchNextPage,
+    allRows.length,
+    isFetchingNextPage,
+    virtualItems,
+  ]);
 
   return (
     <div>
@@ -207,62 +255,82 @@ const CountryCard: React.FC = () => {
       </div>
 
       <div>
-        <div
-          className={styles.cardContainer}
-          ref={parentRef}
-          style={{
-            height: `400px`,
-            overflow: "auto",
-            position: "relative",
-          }}
-        >
-          {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-            // Get the country corresponding to this virtual row index
-            const country = countriesList[virtualRow.index];
+        {status === "pending" ? (
+          <p>Loading...</p>
+        ) : status === "error" ? (
+          <span>Error: {error.message}</span>
+        ) : (
+          <div
+            className={styles.cardContainer}
+            ref={parentRef}
+            style={{
+              height: `400px`,
+              overflow: "auto",
+              position: "relative",
+            }}
+          >
+            {virtualItems.map((virtualRow) => {
+              const isLoaderRow = virtualRow.index > allRows.length - 1;
+              const country = allRows[virtualRow.index];
 
-            return (
-              <div
-                key={virtualRow.index}
-                style={{
-                  position: "absolute",
-                  top: virtualRow.start,
-                  // left: "35%",
-                  // transform: "translateY(-50%)", // Correcting position
-                  width: "100%",
-                  height: `${virtualRow.size}px`,
-                }}
-              >
-                <Card
-                  key={country.id}
-                  id={country.id}
-                  deleted={country.deleted}
+              return (
+                <div
+                  key={virtualRow.index}
+                  style={{
+                    position: "absolute",
+                    top: virtualRow.start,
+                    // left: "35%",
+                    // transform: "translateY(-50%)", // Correcting position
+                    width: "100%",
+                    height: `${virtualRow.size}px`,
+                  }}
                 >
-                  <CardImage
-                    src={country.imageSrc}
-                    alt={country.nameKa || country.nameEn}
-                  />
-                  <div className={styles.cardText}>
-                    <CardHeader
-                      onLike={handleLikeUp(country.id, country.like)}
-                      likeCount={country.like}
-                      name={lang === "ka" ? country.nameKa : country.nameEn}
-                    />
-                    <CardContent
-                      population={country.population}
-                      capital={
-                        lang === "ka" ? country.capitalKa : country.capitalEn
-                      }
-                    />
-                    <CardFooter
-                      onDeleteCountry={() => handleDeleteCountry(country.id)}
-                      onEditCountry={() => getEditCountry(country.id)}
-                    />
-                  </div>
-                </Card>
-              </div>
-            );
-          })}
-        </div>
+                  {isLoaderRow ? (
+                    hasNextPage ? (
+                      "Loading more..."
+                    ) : (
+                      "Nothing more to load"
+                    )
+                  ) : (
+                    <Card
+                      key={country.id}
+                      id={country.id}
+                      deleted={country?.deleted}
+                    >
+                      <CardImage
+                        src={country?.imageSrc}
+                        alt={country?.nameKa || country?.nameEn}
+                      />
+                      <div className={styles.cardText}>
+                        <CardHeader
+                          onLike={handleLikeUp(country?.id, country?.like)}
+                          likeCount={country?.like}
+                          name={
+                            lang === "ka" ? country?.nameKa : country?.nameEn
+                          }
+                        />
+                        <CardContent
+                          population={country?.population}
+                          capital={
+                            lang === "ka"
+                              ? country?.capitalKa
+                              : country?.capitalEn
+                          }
+                        />
+                        <CardFooter
+                          onDeleteCountry={() =>
+                            handleDeleteCountry(country.id)
+                          }
+                          onEditCountry={() => getEditCountry(country.id)}
+                        />
+                      </div>
+                    </Card>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       <ConfirmationModal
@@ -271,6 +339,9 @@ const CountryCard: React.FC = () => {
         onConfirm={confirmDelete}
         message={confirmationMessage}
       />
+      <div>
+        {isFetching && !isFetchingNextPage ? "Background Updating..." : null}
+      </div>
     </div>
   );
 };

@@ -13,16 +13,8 @@ export interface Country {
   isEditting?: boolean;
   initialIndex?: number;
 }
-interface PaginationMeta {
-  first: number;
-  prev: number | null;
-  next: number | null;
-  last: number;
-  pages: number;
-  items: number;
-}
 
 export interface CountryResponse {
   data: Country[];
-  pagination: PaginationMeta;
+  nextOffset: number | null;
 }

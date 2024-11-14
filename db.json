@@ -8,7 +8,7 @@
       "capitalEn": "Tokyo",
       "population": 125800000,
       "imageSrc": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Flag_of_Japan.svg",
-      "like": 1,
+      "like": 4,
       "deleted": false
     },
     {
@@ -19,7 +19,7 @@
       "capitalEn": "Berlin",
       "capitalKa": "ბერლინი",
       "id": "2",
-      "like": 2,
+      "like": 4,
       "isEditting": false,
       "initialIndex": 2
     },

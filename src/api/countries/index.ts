@@ -11,14 +11,23 @@ export const getCountriesData = async (): Promise<Country[]> => {
   }
 };
 
-export const getFetchedCountriesData = async (
-  param: number,
-): Promise<CountryResponse> => {
+export const getFetchedCountriesData = async ({
+  page,
+  limit,
+}: {
+  page: number;
+  limit: number;
+}): Promise<CountryResponse> => {
   try {
-    const response = await httpClient.get<CountryResponse>(
-      `/countries?_page=${param}&_per_page=4`,
+    const response = await httpClient.get<{ data: Country[]; next: number }>(
+      `/countries?_page=${page}&_per_page=${limit}`,
     );
-    return response.data;
+    console.log(response);
+
+    return {
+      data: response.data.data,
+      nextOffset: response.data.next,
+    };
   } catch (error) {
     console.error("Error fetching countries data:", error);
     throw new Error("Failed to fetch countries data.");
