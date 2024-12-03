@@ -1,54 +1,195 @@
-# CountryScope
+# StayConnected 🌟
 
-## 📝 Table of Contents
+<div align="center">
+  <img src="https://images.unsplash.com/photo-1531498860502-7c67cf02f657?q=80&w=1470&auto=format&fit=crop" width="600" alt="StayConnected Banner" />
 
-- [About](#about)
-- [Technologies Used](#technologies_used)
-- [Getting Started](#getting_started)
-- [Webpage Preview](#webpage_preview)
+  <p align="center">
+    A modern Q&A platform built for knowledge sharing and community engagement
+  </p>
 
-## 🧐 About <a name = "about"></a>
+  <p>
+    <a href="#features">Features</a> •
+    <a href="#tech-stack">Tech Stack</a> •
+    <a href="#getting-started">Getting Started</a> •
+    <a href="#architecture">Architecture</a> •
+    <a href="#contributing">Contributing</a> •
+    <a href="#team">Team</a>
+  </p>
+</div>
 
-CountryScope is a web application built with React and TypeScript that allows users to explore and learn about various countries around the world. The app features an intuitive interface, custom visual solutions, and a wealth of information on each country.
+## ✨ Features
 
-## 🤖 Technologies Used <a name="technologies_used"></a>
+### 🏠 Homepage
 
-- **React:** A JavaScript library for building user interfaces.
-- **TypeScript:** A typed superset of JavaScript that compiles to plain JavaScript.
-- **Vite:** A build tool that provides a fast development environment.
+- Dynamic header with authentication state management
+- Real-time questions feed
+- Interactive leaderboard
+- Dark/Light mode toggle
 
-### Other Technologies
+### 👤 User Authentication
 
-- **Git:** Distributed version control system for tracking changes.
+- **Registration**
+  - Email verification
+  - Default avatar assignment
+  - Secure password handling
+- **Login**
+  - Email and password validation
+  - Protected route handling
+  - Seamless authentication flow
 
-## 🏁 Getting Started <a name = "getting_started"></a>
+### 📝 Questions
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+- Create detailed questions with tags
+- Rich text editing support
+- Advanced search and filtering
+- Sort by date, status, or answers
+- Tag-based categorization
 
-1. Clone the Repository:
+### 💬 Answers
+
+- Markdown support for detailed responses
+- Best answer highlighting
+- Vote system for community feedback
+- Sort by relevance or date
+
+### 👑 Leaderboard System
+
+- Point-based ranking
+- Best answer rewards
+- Like/upvote system
+- Activity tracking
+
+### 👤 User Profiles
+
+- Activity statistics
+- Question and answer history
+
+## 🛠 Tech Stack
+
+- **Frontend Framework**: React + TypeScript
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS + shadcn/ui
+- **State Management**: Jotai
+- **Form Handling**: React Hook Form + Zod
+- **API Communication**: Axios + React Query
+- **Routing**: React Router
+- **UI Components**: shadcn/ui
+
+## 👥 Team
+
+Meet our amazing team of contributors who made this project possible:
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/richi1213">
+        <img src="https://github.com/richi1213.png" width="100px;" alt="Richi"/>
+        <br />
+        <sub><b>Richi</b></sub>
+      </a>
+      <br />
+      <sub>Lead Developer</sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/sopo">
+        <img src="https://github.com/sopo.png" width="100px;" alt="Sopo"/>
+        <br />
+        <sub><b>Sopo</b></sub>
+      </a>
+      <br />
+      <sub>Frontend Developer</sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/anijujunashvili">
+        <img src="https://github.com/anijujunashvili.png" width="100px;" alt="Ani Jujunashvili"/>
+        <br />
+        <sub><b>Ani Jujunashvili</b></sub>
+      </a>
+      <br />
+      <sub>UI/UX Developer</sub>
+    </td>
+    <td align="center">
+      <a href="https://github.com/tsamkharadze">
+        <img src="https://github.com/tsamkharadze.png" width="100px;" alt="T. Samkharadze"/>
+        <br />
+        <sub><b>T. Samkharadze</b></sub>
+      </a>
+      <br />
+      <sub>Full Stack Developer</sub>
+    </td>
+  </tr>
+</table>
+
+## 🚀 Getting Started
+
+1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/tsamkharadze/countries-app.git
+   git clone https://github.com/yourusername/stayconnected.git
    ```
 
-2. Navigate to the Project Directory:
+2. **Install dependencies**
 
    ```bash
-   cd countries-app
-   ```
-
-3. Install the Dependencies:
-
-   ```bash
+   cd stayconnected
    npm install
    ```
 
-4. Start the Development Server:
+3. **Start the development server**
 
    ```bash
    npm run dev
    ```
 
-## 🌐 Webpage Preview <a name="webpage_preview"></a>
+4. **Build for production**
+   ```bash
+   npm run build
+   ```
 
-Check out the live demo at [CountryScope Demo](https://main--countryscopedemo.netlify.app/).
+## 🏗 Architecture
+
+### Directory Structure
+
+```
+src/
+├── components/         # Reusable UI components
+├── features/          # Feature-specific components
+├── hooks/            # Custom React hooks
+├── lib/              # Utility functions
+├── pages/            # Route components
+├── services/         # API services
+├── store/            # State management
+└── types/            # TypeScript definitions
+```
+
+### Key Components
+
+#### Authentication Flow
+
+```mermaid
+graph LR
+    A[Login/Register] --> B{Auth Check}
+    B -->|Success| C[Protected Routes]
+    B -->|Failure| D[Error Handling]
+```
+
+#### Data Flow
+
+```mermaid
+graph TD
+    A[User Action] --> B[State Update]
+    B --> C[API Call]
+    C --> D[UI Update]
+```
+
+## 🙏 Acknowledgments
+
+- [shadcn/ui](https://ui.shadcn.com/) for the beautiful UI components
+- [Tailwind CSS](https://tailwindcss.com/) for the utility-first CSS framework
+- [Vite](https://vitejs.dev/) for the blazing fast build tool
+
+---
+
+<div align="center">
+  Made with ❤️ by the StayConnected Team
+</div>
